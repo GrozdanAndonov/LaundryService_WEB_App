@@ -179,19 +179,8 @@
 															type="button" rel="tooltip" title="View Profile"
 															class="btn btn-info btn-simple btn-xs btn-link">
 															<i class="fa fa-user"></i>
-														</button></a> <a
-													href="/LaundryService/orderList/editOrder/${ order.id }">
-														<button type="button" rel="tooltip" title="Edit Profile"
-															class="btn btn-success btn-simple btn-xs btn-link">
-															<i class="fa fa-edit"></i>
-														</button>
-												</a> <a
-													href="/LaundryService/orderList/deleteOrder/${ order.id }">
-														<button type="button" rel="tooltip" title="Remove"
-															class="btn btn-danger btn-simple btn-xs btn-link">
-															<i class="fa fa-times"></i>
-														</button>
-												</a></td>
+														</button></a>
+														</td>
 											</tr>
 										</c:forEach>
 									</tbody>

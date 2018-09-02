@@ -91,13 +91,23 @@
 						</p>
 					</div>
 					</div>
-					<div class="form-group">
+					<div class="form-row">
+					<div class="form-group col-md-6">
 						<label for="inputAddress2">Street address</label> <input type="text"
 							class="form-control" id="inputAddress2" placeholder="Street address..."
 							name="streetAddress" value="${streetAddress}">
 						<p class="text-danger">
 							<strong>${streetError}</strong>
 						</p>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="inputAddress2">Bulstat</label> <input type="text"
+							class="form-control" id="inputAddress2" placeholder="Bulstat..."
+							name="bulstat" value="${bulstat}">
+						<p class="text-danger">
+							<strong>${streetError}</strong>
+						</p>
+					</div>
 					</div>
 					<div class="form-row">
 						<div class="form-group col-md-6">
