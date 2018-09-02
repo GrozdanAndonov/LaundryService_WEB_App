@@ -23,7 +23,7 @@ public class AdminController {
 	@RequestMapping(value = "/showUsers", method = RequestMethod.GET)
 	public String aboutUs(Model model, HttpSession session) {	
 		if(LoggedValidator.checksIfUserIsLogged(session)) {
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		
 		try {
@@ -32,7 +32,7 @@ public class AdminController {
 			e.printStackTrace();
 		}
 		
-		return "adminListUsers";
+		return "adminViews/adminListUsers";
 	}
 	
 }

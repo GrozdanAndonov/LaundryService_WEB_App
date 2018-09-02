@@ -32,25 +32,25 @@ public class CreateOrderController {
 	@RequestMapping(value="showCreateOrderPage", method = RequestMethod.GET)
 	public String createOrderPage(HttpSession session, Model model, RedirectAttributes attr) {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		addUserDefaultValuesForOrderForm(session, model);
-		return "userCreateOrder";
+		return "userViews/userCreateOrder";
 	}
 	
 	@RequestMapping(value="showCreateOrderPageWithErrors", method = RequestMethod.GET)
 	public String createOrderPageAfterErrors(HttpSession session, Model model, RedirectAttributes attr) {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		
-		return "userCreateOrder";
+		return "userViews/userCreateOrder";
 	}
 	
 	@RequestMapping(value="createOrder", method = RequestMethod.POST)
 	public String createOrder(HttpSession session, HttpServletRequest request, RedirectAttributes attr) {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		
 		String firstName = request.getParameter("firstName");

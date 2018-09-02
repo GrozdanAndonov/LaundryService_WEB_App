@@ -21,26 +21,26 @@ public class WelcomeControler {
 	@RequestMapping(value = "/*", method = RequestMethod.GET)
 	public String welcome(Model viewModel, HttpSession session) {	
 		if(LoggedValidator.checksIfUserIsLogged(session)) {
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}else {
 				if(((User) session.getAttribute("User")).getIsAdmin()) {
-					return "adminIndexPage";
+					return "adminViews/adminIndexPage";
 				}
-			return "indexLogged";
+			return "userViews/indexLogged";
 		}
 	}
 	
 	@RequestMapping(value = "/aboutUs", method = RequestMethod.GET)
 	public String aboutUs(Model viewModel, HttpSession session) {	
-		return "aboutUs";
+		return "notLoggedIn/aboutUs";
 	}
 	
 	@RequestMapping(value = "/contactUs", method = RequestMethod.GET)
 	public String contactUs(Model viewModel, HttpSession session) {	
 		if(LoggedValidator.checksIfUserIsLogged(session)) {
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
-			return "contactWithAdmin";
+			return "userViews/contactViewWithAdmin";
 	}
 	
 }

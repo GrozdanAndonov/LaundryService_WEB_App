@@ -40,7 +40,7 @@ public class ListOrdersController {
 	@RequestMapping(value="showFinishedOrderListPage", method = RequestMethod.GET)
 	public String listOrderPage(HttpSession session, Model model, HttpServletRequest req) {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
 		String newDate = DateFormatConverter.convertFromDBToSearchingCalendarsView(user.getDateCreated());
@@ -48,13 +48,13 @@ public class ListOrdersController {
 		model.addAttribute("firstDate", newDate);
 		model.addAttribute("secondDate", curDate);
 		
-		return "userListFinishedOrders";
+		return "userViews/userListFinishedOrders";
 	}
 	
 	@RequestMapping(value="searchOrdersBetweenDates", method = RequestMethod.POST)
 	public String searchOrdersByDate(HttpSession session,  HttpServletRequest req,  RedirectAttributes attr) throws ParseException, SQLException {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
 		
@@ -70,19 +70,19 @@ public class ListOrdersController {
 	@RequestMapping(value="orderDetails/{orderId}", method = RequestMethod.GET)
 	public String showOrderDetails(@PathVariable int orderId, HttpSession session, Model model) throws SQLException {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		setDataForOrderDetails(session, orderId, model);
-		return "userViewOrderDetails";
+		return "userViews/userViewOrderDetails";
 	}
 	
 	@RequestMapping(value="unfinishedOrderDetails/{orderId}", method = RequestMethod.GET)
 	public String showUnfinishedOrderDetails(@PathVariable int orderId, HttpSession session, Model model) throws SQLException {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		setDataForOrderDetails(session, orderId, model);
-		return "userViewUnfinishedOrderDetails";
+		return "userViews/userViewUnfinishedOrderDetails";
 	}
 	
 	private void setDataForOrderDetails(HttpSession session, int orderId, Model model) throws SQLException {
@@ -94,7 +94,7 @@ public class ListOrdersController {
 	@RequestMapping(value="showOpenListOrderPage", method = RequestMethod.GET)
 	public String showOpenOrderList(HttpSession session, Model model) throws SQLException {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		
 		User user = (User) session.getAttribute("User");
@@ -103,13 +103,13 @@ public class ListOrdersController {
 		model.addAttribute("firstDate", newDate);
 		model.addAttribute("secondDate", curDate);
 		
-		return "userListUnfinishedOrders";
+		return "userViews/userListUnfinishedOrders";
 	}
 	
 	@RequestMapping(value="findCheckedAndUncheckedOrders", method = RequestMethod.POST)
 	public String showcheckedAndUncheckedOrders(RedirectAttributes attr, HttpSession session,  HttpServletRequest req) {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
 		String dateFrom = ""; 
@@ -131,7 +131,7 @@ public class ListOrdersController {
 	@RequestMapping(value="/deleteUncheckedOrder/{orderId}", method = RequestMethod.GET)
 	public String deleteOrder(@PathVariable int orderId, HttpSession session, RedirectAttributes attr) {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
 		try {
@@ -150,7 +150,7 @@ public class ListOrdersController {
 	@RequestMapping(value="editOrder/{orderId}", method = RequestMethod.GET)
 	public String editOrder(@PathVariable int orderId, HttpSession session, RedirectAttributes attr, Model model) {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
 		Order order = null;
@@ -171,13 +171,13 @@ public class ListOrdersController {
 		model.addAttribute("isExpressV",order.getIsExpress());
 		}
 		
-		return "userEditOrder";
+		return "userViews/userEditOrder";
 	}
 	
 	@RequestMapping(value="editCurrentOrder", method = RequestMethod.POST)
 	public String editOrder(HttpSession session, HttpServletRequest req, RedirectAttributes attr) {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		
 		String firstNameInput = req.getParameter("firstName");
@@ -199,7 +199,6 @@ public class ListOrdersController {
 				if(checkEditInfoFromTheDB(firstNameInput, lastNameInput, telNumberInput, cityInput, streetAddressInput, emailInput, textInput, isExpress, attr, user)) {
 					od.updateOrder(user, firstNameInput, lastNameInput, telNumberInput, cityInput, streetAddressInput, emailInput, textInput, isExpress, userOrderForEditId);
 					attr.addFlashAttribute("msgSuccess", "Order has been updated successfully!");
-					System.out.println("success");
 				}else {
 					attr.addFlashAttribute("msgError", "The information you are trying to update is the same!");
 				}
@@ -208,7 +207,6 @@ public class ListOrdersController {
 				attr.addFlashAttribute("msgError", "Something went wrong! Please try again later!");
 			}
 		}
-		System.out.println("eND");
 		CreateOrderController.addUserAtributesForFormAfterRedirect(firstNameInput, lastNameInput, telNumberInput, cityInput, streetAddressInput, emailInput, textInput, isExpress, attr);
 		return "redirect:showEditOrderPageWithErrors";
 	}
@@ -216,15 +214,15 @@ public class ListOrdersController {
 	@RequestMapping(value="showEditOrderPageWithErrors", method = RequestMethod.GET)
 	public String showErrorsForEditOrder(HttpSession session) {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
-		return "userEditOrder";
+		return "userViews/userEditOrder";
 	}
 	
 	@RequestMapping(value = "backToOpenListOrderPage", method = RequestMethod.GET)
 	public String backToOpenListOrderPage( HttpSession session, RedirectAttributes attr) {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
 		setDataForUnfinishedOrders(attr, user, staticDateFrom, staticDateTo);
@@ -234,7 +232,7 @@ public class ListOrdersController {
 	@RequestMapping(value="backToFinishedListOrderPage", method = RequestMethod.GET)
 	public String backToFinishedListOrderPage(HttpSession session, RedirectAttributes attr) {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
 		try {
@@ -262,7 +260,6 @@ public class ListOrdersController {
 	 */
 	private boolean checkEditInfoFromTheDB(String firstName, String lastName, String telNum, String city, 
 			String strAddress, String email, String note, boolean isExpress,  RedirectAttributes attr, User user) throws SQLException {
-		System.out.println("checkEditInfoFromTheDB");
 		Order order = od.findOrderByIdForUser(user, new Order(userOrderForEditId));
 		return checksIfDataFromDBAndFromFormIsTheSame(firstName, lastName, telNum, city, strAddress, email, note, isExpress, order);
 	}
@@ -299,7 +296,6 @@ public class ListOrdersController {
 		if(isExpress != order.getIsExpress()) {
 			result = true;
 		}
-		System.out.println("checksIfDataFromDBAndFromFormIsTheSame"+"--"+result);
 		return result;
 	}
 

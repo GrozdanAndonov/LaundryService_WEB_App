@@ -29,13 +29,13 @@ public class SettingsController {
 	@RequestMapping(value="/aboutUser")
 	public String aboutUser(Model model, HttpSession session){
 		if(LoggedValidator.checksIfUserIsLogged(session)) {
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		model.addAttribute("numOrder",0);
 		model.addAttribute("numDiscounts",0);
 		model.addAttribute("numComments",0);
 		
-		return "aboutUser";
+		return "userViews/aboutUser";
 	}
 	
 	
@@ -44,27 +44,27 @@ public class SettingsController {
 	@RequestMapping(value="/settings")
 	public String settings( Model model, HttpSession session){
 		if(LoggedValidator.checksIfUserIsLogged(session)) {
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
 		addAtributesInModel(user, model);
-		return "settingsUser";
+		return "userViews/settingsUser";
 	}
 	
 	
 	@RequestMapping(value="/settingsWithErrors")
 	public String settingsWithErrors( Model model, HttpSession session){
 		if(LoggedValidator.checksIfUserIsLogged(session)) {
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
-		return "settingsUser";
+		return "userViews/settingsUser";
 	}
 	
 	
 	@RequestMapping(value="changeUserData", method = RequestMethod.POST)
 	public String changeUserValues(HttpSession session, HttpServletRequest req, Model model, RedirectAttributes attr) {
 		if(LoggedValidator.checksIfUserIsLogged(session)) {
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
 		

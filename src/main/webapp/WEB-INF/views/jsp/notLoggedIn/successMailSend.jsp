@@ -14,7 +14,7 @@
 	<script src='https://www.google.com/recaptcha/api.js?hl=en'></script>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-	<title>Not Success</title>
+	<title>Success!</title>
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
  <style> @media screen and (max-height: 575px){ #rc-imageselect, .g-recaptcha {transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;} } </style> 
@@ -25,7 +25,7 @@
 <body class="components-page profile-page">
 	<jsp:include page="headerNotLogged.jsp"></jsp:include>
       <div class="wrapper">
-   <div class="page-header header-filter" data-parallax="true" style="background-image: url('<c:url value="/img/bg2.jpg"/>');">
+ <div class="page-header header-filter" data-parallax="true" style="background-image: url('<c:url value="/img/bg2.jpg"/>');">
         <div class="container">			
             <div class="row">
                 <div class="col-md-8 ml-auto mr-auto">
@@ -37,28 +37,26 @@
             </div>
         </div>
     </div>
-   
-	
-
 		<div class="main main-raised">
 			<div class="profile-content">
 	            <div class="container">
    
-   
-   	<h3 class="text-primary"><strong>${msg}</strong></h3>
-   	<ul class="list-unstyled">
-   		<li><h4 class="text-danger"> <i class="material-icons">error_outline</i><strong>${nameError}</strong></h4></li>
-   		<li><h4 class="text-danger"> <i class="material-icons">error_outline</i><strong>${emailError}</strong></h4></li>
-   		<li><h4 class="text-danger"> <i class="material-icons">error_outline</i><strong>${textError}</strong></h4></li>
-   		<li><h4 class="text-danger"> <i class="material-icons">error_outline</i><strong>${recaptchaError}</strong></h4></li>
-   	</ul>
- 
+   	<div class="section">
+		 <div class="alert alert-success">
+		    <div class="container-fluid">
+			  <div class="alert-icon">
+				<i class="material-icons">check</i>
+			  </div>			  
+		      <b>${msgSuccess}</b>
+		    </div>
+		</div>
+ </div>
    </div>
    </div>
    </div>
    </div>
    
-<jsp:include page="footer.jsp"></jsp:include>	
+	<jsp:include page="../footer.jsp"></jsp:include>	
 </body>
-<jsp:include page="staticContent.jsp"></jsp:include>
+<jsp:include page="../staticContent.jsp"></jsp:include>
 </html>

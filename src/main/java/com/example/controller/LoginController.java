@@ -25,7 +25,7 @@ public class LoginController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login() {
-		return "login";
+		return "notLoggedIn/login";
 	}
 	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
@@ -42,7 +42,7 @@ public class LoginController {
 		if(!checkIfEmailAndPasswordExists(email, password, model)){
 			model.addAttribute("email", email);
 			model.addAttribute("password", password);
-			return "login";
+			return "notLoggedIn/login";
 		}
 		
 		User user = ud.getFullUserByEmail(email);

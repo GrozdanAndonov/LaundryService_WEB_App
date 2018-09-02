@@ -11,7 +11,7 @@
 	name="viewport" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <script src='https://www.google.com/recaptcha/api.js'></script>
-<jsp:include page="staticContent.jsp"></jsp:include>
+<jsp:include page="../staticContent.jsp"></jsp:include>
 </head>
 <body class="index-page">
 	<jsp:include page="headerLogged.jsp"></jsp:include>
@@ -80,6 +80,6 @@
 			</div>
 		</div>
 	</div>
-	<jsp:include page="footer.jsp"></jsp:include>
+	<jsp:include page="../footer.jsp"></jsp:include>
 </body>
 </html>

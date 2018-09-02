@@ -31,21 +31,21 @@ public class ContactsController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public String contacts(HttpServletRequest request){	
-		return "contacts";
+		return "notLoggedIn/contacts";
 	}
 	
 	@RequestMapping(value="/contactWithAdmin", method = RequestMethod.GET)
 	public String contactWithAdmins(HttpServletRequest request, HttpSession session, RedirectAttributes attr){	
 		if(LoggedValidator.checksIfUserIsLogged(session)) {
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
-		return "contactViewWithAdmin";
+		return "userViews/contactViewWithAdmin";
 	}
 	
 	@RequestMapping(value="/contactWithAdmin", method = RequestMethod.POST)
 	public String sendMessageToAdmin(HttpServletRequest request, HttpSession session, Model model, RedirectAttributes attr){	
 		if(LoggedValidator.checksIfUserIsLogged(session)) {
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 		}
 		
 		String text = request.getParameter("text");
@@ -127,7 +127,7 @@ public class ContactsController {
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
-		return "contacts";
+		return "notLoggedIn/contacts";
 	}
 	private void setErrorAtributesWithLanguageCode(int langCode, int[] errorResult, Model model) {
 		if (errorResult[0] == 1) {

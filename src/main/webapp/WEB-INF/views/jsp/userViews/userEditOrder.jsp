@@ -10,7 +10,7 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
 	name="viewport" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<jsp:include page="staticContent.jsp"></jsp:include>
+<jsp:include page="../staticContent.jsp"></jsp:include>
 </head>
 <body class="index-page">
 	<jsp:include page="headerLogged.jsp"></jsp:include>
@@ -20,7 +20,7 @@
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
-						<h1>Create order</h1>
+						<h1>Edit order</h1>
 					</div>
 				</div>
 			</div>
@@ -31,9 +31,9 @@
 		<div class="section section-basic">
 			<div class="container">
 				<div class="title text-centre">
-					<h2>Basic Elements</h2>
+					<h2>Edit order form</h2>
 				</div>
-				<form method="POST" action="/LaundryService/orderCreate/createOrder">
+				<form method="POST" action="/LaundryService/orderList/editCurrentOrder">
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label for="inputEmail4">First Name</label> 
@@ -95,10 +95,10 @@
 						<strong>${msgSuccess}</strong>
 					</p>
 					<div class="form-row">
-						<div class="col-md-6">
-					<button type="submit" class="btn btn-primary">Create order</button>
+						<div class="col-md-4">
+					<button type="submit" class="btn btn-primary">Edit order</button>
 					</div>
-					<div class="form-check">
+					<div class="form-check col-md-4">
 				      <label class="form-check-label">
 				          <input id="checkbox" class="form-check-input" type="checkbox" name="isExpress" value="${isExpressV}">
 				          Express order
@@ -109,11 +109,15 @@
 			  		</div>
 			  		</div>
 				</form>
-
+					<div class="col-md-12">
+			  		<a href="/LaundryService/orderList/backToOpenListOrderPage">
+					<button class="btn btn-primary">Back</button>
+					</a>
+					</div>
 			</div>
 		</div>
 	</div>
-	<jsp:include page="footer.jsp"></jsp:include>
+	<jsp:include page="../footer.jsp"></jsp:include>
 </body>
 <script>
 let checkbox = document.getElementById('checkbox');

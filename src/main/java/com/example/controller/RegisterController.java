@@ -29,7 +29,7 @@ public class RegisterController {
 	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public String register(Model viewModel) {	
-		return "register";
+		return "notLoggedIn/register";
 	}
 	
 	
@@ -44,7 +44,7 @@ public class RegisterController {
 		try {
 			if(this.checkInputsForErrors(inputs, model)){
 				this.addInputsInTheModel(inputs, model);
-				return "register";
+				return "notLoggedIn/register";
 			}else{
 				User user = new User(inputs[0],inputs[1],inputs[2],inputs[3],inputs[4],0);
 					ud.insertUser(user);

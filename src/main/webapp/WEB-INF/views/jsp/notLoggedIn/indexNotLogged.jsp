@@ -10,10 +10,10 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
 	name="viewport" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<jsp:include page="staticContent.jsp"></jsp:include>
+<jsp:include page="../staticContent.jsp"></jsp:include>
 </head>
 <body class="index-page">
-	<jsp:include page="headerLogged.jsp"></jsp:include>
+	<jsp:include page="headerNotLogged.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
 		style="background-image: url('<c:url value="/img/bg2.jpg"/>');">
 		<div class="container">
@@ -33,7 +33,6 @@
 			<div class="container">
 				<div class="title">
 					<h2>Basic Elements</h2>
-
 					<div id="carouselExampleIndicators" class="carousel slide"
 						data-ride="carousel">
 						<ol class="carousel-indicators">
@@ -66,7 +65,6 @@
 							<span class="sr-only">Next</span>
 						</a>
 					</div>
-
 				</div>
 
 
@@ -77,6 +75,6 @@
 
 
 
-	<jsp:include page="footer.jsp"></jsp:include>
+	<jsp:include page="../footer.jsp"></jsp:include>
 </body>
 </html>

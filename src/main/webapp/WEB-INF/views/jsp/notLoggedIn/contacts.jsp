@@ -11,7 +11,7 @@
 	name="viewport" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <script src='https://www.google.com/recaptcha/api.js'></script>
-<jsp:include page="staticContent.jsp"></jsp:include>
+<jsp:include page="../staticContent.jsp"></jsp:include>
 <style>
 @media screen and (max-height: 575px) {
 	#rc-imageselect, .g-recaptcha {
@@ -111,6 +111,6 @@
 
 
 
-	<jsp:include page="footer.jsp"></jsp:include>
+	<jsp:include page="../footer.jsp"></jsp:include>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Login</title>
-<jsp:include page="staticContent.jsp"></jsp:include>
+<jsp:include page="../staticContent.jsp"></jsp:include>
 </head>
 <body class="signup-page"> 
 <jsp:include page="headerNotLogged.jsp"></jsp:include>
@@ -54,6 +54,6 @@
                 </div>
             </div>
         </div>
-<jsp:include page="footer.jsp"></jsp:include>
+<jsp:include page="../footer.jsp"></jsp:include>
 </body>
 </html>

@@ -43,7 +43,7 @@ public class ProfileController {
 	public String uploading(@RequestParam("userAvatar") MultipartFile file, HttpServletRequest req, HttpSession session, Model model){
 	
 			if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "indexNotLogged";
+			return "notLoggedIn/indexNotLogged";
 			}
 			
 			User user = (User) session.getAttribute("User");
@@ -57,7 +57,7 @@ public class ProfileController {
 			if(!isAllowed) {
 				model.addAttribute("errorFile", "Upload file with the givven extensions!");
 				addAtributesInModel(user, model);
-				return "settingsUser";
+				return "userViews/settingsUser";
 			}
 		
 			File folders = new File(filePath);
@@ -69,7 +69,7 @@ public class ProfileController {
 				model.addAttribute("errorFile", "Sorry, try again later!");
 				e.printStackTrace();
 				addAtributesInModel(user, model);
-				return "settingsUser";
+				return "userViews/settingsUser";
 			}
 			try {
 				ud.insertAvatarUrl(user, fullPathToFile);
@@ -79,12 +79,12 @@ public class ProfileController {
 				addAtributesInModel(user, model);
 				model.addAttribute("errorFile", "Sorry, try again later!");
 				e.printStackTrace();
-				return "settingsUser";
+				return "userViews/settingsUser";
 			}
 			
 			model.addAttribute("successFile", "You have successfully uploaded your file.");
 			 addAtributesInModel(user, model);
-			return "settingsUser";
+			return "userViews/settingsUser";
 	
 }
 
@@ -160,7 +160,6 @@ public class ProfileController {
 		String avatarUrl;
 		String defaultUrl = WebInitializer.LOCATION+
 				File.separator+"default-avatar"+File.separator+"default.jpg";
-		System.out.println(idUser);
 		try {
 			user = ud.getUserById(idUser);
 			 avatarUrl = user.getAvatarUrl();
@@ -172,7 +171,6 @@ public class ProfileController {
 				Path path = file.toPath();
 			    Files.copy(path, out);
 			    out.flush();
-			    System.out.println(avatarUrl);
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
