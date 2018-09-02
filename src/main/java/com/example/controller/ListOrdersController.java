@@ -2,7 +2,6 @@ package com.example.controller;
 
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
@@ -15,11 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.model.dao.OrderDAO;
-import com.example.model.dao.UserDAO;
 import com.example.model.pojo.Order;
 import com.example.model.pojo.User;
 import com.example.util.DateFormatConverter;
@@ -29,15 +26,15 @@ import com.example.util.LoggedValidator;
 @RequestMapping(value="orderList")
 public class ListOrdersController {
 
-	
-	@Autowired
-	private UserDAO ud;
-	
 	@Autowired
 	private OrderDAO od;
 	
 	private static String staticDateFrom = "";
 	private static String staticDateTo = "";
+	
+	private static String staticDateFromFinishedOrders = "";
+	private static String staticDateToFinishedOrders = "";
+	
 	private static int userOrderForEditId = 0;
 	
 	@RequestMapping(value="showFinishedOrderListPage", method = RequestMethod.GET)
@@ -61,18 +58,11 @@ public class ListOrdersController {
 		}
 		User user = (User) session.getAttribute("User");
 		
-		String firstDate = req.getParameter("firstDate"); // coming 08/30/2018 10:05 PM
-		String secondDate = req.getParameter("secondDate"); // coming 08/30/2018 10:05 PM
-		Set<Order> orders =	od.searchFinishedOrdersForUserBetweenDates(user, DateFormatConverter.convertFromPMTo24Hour(firstDate),
-				DateFormatConverter.convertFromPMTo24Hour(secondDate));
-		double total = 0;
-		
-		for(Order order : orders) {
-			total+=order.getCost();
-		}
-		
-		attr.addFlashAttribute("orders", orders);
-		attr.addFlashAttribute("total",total);
+		String firstDate = DateFormatConverter.convertFromPMTo24Hour(req.getParameter("firstDate")); // coming 08/30/2018 10:05 PM
+		String secondDate = DateFormatConverter.convertFromPMTo24Hour(req.getParameter("secondDate")); // coming 08/30/2018 10:05 PM
+		staticDateFromFinishedOrders = firstDate;
+		staticDateToFinishedOrders = secondDate;
+		setDataForFinishedOrders(user, attr);
 		
 		return "redirect:showFinishedOrderListPage";
 	}
@@ -82,11 +72,23 @@ public class ListOrdersController {
 		if(LoggedValidator.checksIfUserIsLogged(session)){
 			return "indexNotLogged";
 		}
+		setDataForOrderDetails(session, orderId, model);
+		return "userViewOrderDetails";
+	}
+	
+	@RequestMapping(value="unfinishedOrderDetails/{orderId}", method = RequestMethod.GET)
+	public String showUnfinishedOrderDetails(@PathVariable int orderId, HttpSession session, Model model) throws SQLException {
+		if(LoggedValidator.checksIfUserIsLogged(session)){
+			return "indexNotLogged";
+		}
+		setDataForOrderDetails(session, orderId, model);
+		return "userViewUnfinishedOrderDetails";
+	}
+	
+	private void setDataForOrderDetails(HttpSession session, int orderId, Model model) throws SQLException {
 		User user = (User) session.getAttribute("User");
 		Order order = od.findOrderByIdForUser(user, new Order(orderId));
 		model.addAttribute("order", order);
-		
-		return "userViewOrderDetails";
 	}
 	
 	@RequestMapping(value="showOpenListOrderPage", method = RequestMethod.GET)
@@ -227,6 +229,32 @@ public class ListOrdersController {
 		User user = (User) session.getAttribute("User");
 		setDataForUnfinishedOrders(attr, user, staticDateFrom, staticDateTo);
 		return "redirect:showOpenListOrderPage";
+	}
+	
+	@RequestMapping(value="backToFinishedListOrderPage", method = RequestMethod.GET)
+	public String backToFinishedListOrderPage(HttpSession session, RedirectAttributes attr) {
+		if(LoggedValidator.checksIfUserIsLogged(session)){
+			return "indexNotLogged";
+		}
+		User user = (User) session.getAttribute("User");
+		try {
+			setDataForFinishedOrders(user, attr);
+		} catch (SQLException | ParseException e) {
+			e.printStackTrace();
+		}
+		return "redirect:showFinishedOrderListPage";
+	}
+	
+	private void setDataForFinishedOrders(User user ,RedirectAttributes attr) throws SQLException, ParseException {
+		Set<Order> orders =	od.searchFinishedOrdersForUserBetweenDates(user, staticDateFromFinishedOrders, staticDateToFinishedOrders);
+		double total = 0;
+		
+		for(Order order : orders) {
+			total+=order.getCost();
+		}
+		
+		attr.addFlashAttribute("orders", orders);
+		attr.addFlashAttribute("total",total);
 	}
 	
 	/**

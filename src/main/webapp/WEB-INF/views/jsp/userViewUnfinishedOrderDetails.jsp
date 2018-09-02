@@ -111,7 +111,7 @@
 			  		</c:if>
 				</form>
 					<div class="col-md-12">
-			  		<a href="/LaundryService/orderList/backToFinishedListOrderPage">
+			  		<a href="/LaundryService/orderList/backToOpenListOrderPage">
 					<button class="btn btn-primary">Back</button>
 					</a>
 					</div>

@@ -104,8 +104,8 @@ public class OrderDAO {
 		Connection con = db.getConn();
 		PreparedStatement ps = con.prepareStatement("SELECT id_order,first_name, last_name, date_creation, date_finished, email, city,"
 				+ "streetAddress, telNum, cost, note, discount, type_of_order FROM orders WHERE date_creation BETWEEN ? AND  ? AND date_finished IS NULL AND id_user= ? AND is_accepted = "+isChecked+";", Statement.RETURN_GENERATED_KEYS);
-		ps.setString(1, dateFrom);
-		ps.setString(2, dateTo);
+		ps.setString(1, dateFrom+":00");
+		ps.setString(2, dateTo+":59");
 		ps.setInt(3, user.getId());
 		ResultSet rs = ps.executeQuery();
 		Set<Order> orders = new HashSet<>();
@@ -129,8 +129,8 @@ public class OrderDAO {
 		Connection con = db.getConn();
 		PreparedStatement ps = con.prepareStatement("SELECT id_order,first_name, last_name, date_creation, date_finished, email, city,"
 				+ "streetAddress, telNum, cost, note, discount, type_of_order FROM orders WHERE date_creation BETWEEN ? AND  ? AND date_finished IS NOT NULL AND id_user= ?;", Statement.RETURN_GENERATED_KEYS);
-		ps.setString(1, dateFrom);
-		ps.setString(2, dateTo);
+		ps.setString(1, dateFrom+":00");
+		ps.setString(2, dateTo+":59");
 		ps.setInt(3, user.getId());
 		ps.executeQuery();
 		ResultSet rs = ps.getResultSet();
