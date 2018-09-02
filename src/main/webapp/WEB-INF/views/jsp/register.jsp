@@ -51,9 +51,9 @@
                                                         <i class="material-icons">face</i>
                                                     </span>
                                                 </div>
-                                                <input type="text" class="form-control" name="address" placeholder="Address..." value="${address}" required><br>                                                
+                                                <input type="text" class="form-control" name="city" placeholder="City..." value="${address}" required><br>                                                
                                             </div>
-                                             <p class="text-danger"><strong>${errorAddress}</strong></p>
+                                             <p class="text-danger"><strong>${errorCity}</strong></p>
                                         </div>
                                         <div class="form-group">
                                             <div class="input-group">

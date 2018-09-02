@@ -13,24 +13,14 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
-                 <li class = "nav-item">
-                        <a href="/LaundryService/orderList/showOpenListOrderPage" class="nav-link">
-                            VIEW OPEN ORDERS
+                    <li class = "nav-item">
+                        <a href="/LaundryService/viewOrders" class="nav-link">
+                            VIEW ORDERS
                         </a>
                     </li>
                     <li class = "nav-item">
-                        <a href="/LaundryService/orderList/showFinishedOrderListPage" class="nav-link">
-                            VIEW FINISHED ORDERS
-                        </a>
-                    </li>
-                    <li class = "nav-item">
-                        <a href="/LaundryService/orderCreate/showCreateOrderPage" class="nav-link">
-                            CREATE ORDER
-                        </a>
-                    </li>
-                      <li class = "nav-item">
-                        <a href="/LaundryService/contacts/contactWithAdmin" class="nav-link">
-                           CONTACT WITH ADMIN
+                        <a href="/LaundryService/showUsers" class="nav-link">
+                            SHOW USERS
                         </a>
                     </li>
                        <li class="dropdown nav-item">
@@ -40,7 +30,7 @@
                                             </div>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <h6 class="dropdown-header">Welcome, ${ sessionScope.User.lastName }</h6>
+                                            <h6 class="dropdown-header">Welcome, Admin ${ sessionScope.User.lastName }</h6>
                                             <a href="/LaundryService/aboutUser" class="dropdown-item">Me</a>
                                             <a href="/LaundryService/settings" class="dropdown-item">Settings</a>
                                             <a href="/LaundryService/logout" class="dropdown-item">Sign out</a>

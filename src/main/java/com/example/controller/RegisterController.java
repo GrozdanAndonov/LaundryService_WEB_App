@@ -2,6 +2,7 @@ package com.example.controller;
 
 
 import java.sql.SQLException;
+import java.text.ParseException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -35,9 +36,10 @@ public class RegisterController {
 	/**
 	 * If user details are valid insert the user in DB, send him welcome email and
 	 * redirect to login
+	 * @throws ParseException 
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public String register(Model model, HttpSession session, HttpServletRequest req) {
+	public String register(Model model, HttpSession session, HttpServletRequest req) throws ParseException {
 		String[] inputs = this.addInputsInStringArray(req);
 		try {
 			if(this.checkInputsForErrors(inputs, model)){
@@ -46,6 +48,7 @@ public class RegisterController {
 			}else{
 				User user = new User(inputs[0],inputs[1],inputs[2],inputs[3],inputs[4],0);
 					ud.insertUser(user);
+					user = ud.getFullUserByEmail(inputs[3]);
 				session.setAttribute("User", user);
 				session.setAttribute("logged", true);
 				/*notificationService.sendNotification(u);*/
@@ -62,7 +65,7 @@ public class RegisterController {
 		inputs[1] = req.getParameter("lastName");//2
 		inputs[2] = req.getParameter("password");//3
 		inputs[3] = req.getParameter("email");//4
-		inputs[4] = req.getParameter("address");//5
+		inputs[4] = req.getParameter("city");//5
 		return inputs;
 	}
 	
@@ -97,7 +100,7 @@ public class RegisterController {
 				result = true;
 			}
 			if(inputs[4] == null || inputs[4].isEmpty()){				
-				model.addAttribute("errorAddress","Enter valid address!");
+				model.addAttribute("errorCity","Enter valid city!");
 				result = true;
 			}
 			return result;

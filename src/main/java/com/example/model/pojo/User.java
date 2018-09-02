@@ -11,10 +11,14 @@ public class User {
 	private String lastName;
 	private String password;
 	private String email;
-	private String address;
+	private String streetAddress;
 	private String avatarUrl;
+	private String telNumber;
 	private Date dateCreated;
 	private int rating;
+	private String city;
+	private	int zipCode;
+	private boolean isAdmin;
 	private Set<Order> orders;
 	private Set<Comment> comments;
 	
@@ -25,15 +29,17 @@ public class User {
 		// used in order constructor
 	}
 	
-	public User(int id, String firstName, String lastName,  String email, 
-			String address, String avatarUrl, Date dateCreated, int rating, Set<Order> orders, Set<Comment> comments) {
+	public User(int id, String firstName, String lastName,  String email, String city, int zipCode, boolean isAdmin,String telNumber,
+			String streetAddress, String avatarUrl, Date dateCreated, int rating, Set<Order> orders, Set<Comment> comments) {
 		this.setId(id);
+		
+		this.setTelNumber(telNumber);
 		
 		this.setFirstName(firstName);
 		
 		this.setLastName(lastName);
 		
-		this.setAddress(address);
+		this.setStreetAddress(streetAddress);
 	
 		this.setAvatarUrl(avatarUrl);
 		
@@ -47,28 +53,39 @@ public class User {
 		
 		this.setComments(comments);
 		
+		this.setCity(city);
+		
+		this.setZipCode(zipCode);
+		
+		this.setAdmin(isAdmin);
+		
 	}
 	/**Constructor used for registration
 	 * @param String, String, String, String ,String
 	 * Date must be set later
 	*/
 	
-	public User(String firstName, String lastName, String password, String email, String address, int rating){
+	public User(String firstName, String lastName, String password, String email, String city, int rating){
 		this.setFirstName(firstName);
 		this.setLastName(lastName);
 		this.setPassword(password);
 		this.setEmail(email);
-		this.setAddress(address);
+		this.setCity(city);
+		this.zipCode = 0;
+		this.streetAddress = new String();
 		this.avatarUrl = new String();
 		this.dateCreated = new Date();// must be set later!!!
 		this.rating = rating;
 		this.orders = new HashSet<>();
 		this.comments = new HashSet<>();
+		this.isAdmin = false;
 	}
 	
-	public User(int id, String firstName, String lastName, String password, String email, String address, int rating){
-		this(firstName, lastName, password, email, address,rating);
+	public User(int id, String firstName, String lastName, String password, String email, String city, int rating, String avatarUrl, String telNumber){
+		this(firstName, lastName, password, email, city,rating);
 		this.setId(id);
+		this.setAvatarUrl(avatarUrl);
+		this.setTelNumber(telNumber);
 	}
 
 	public String getAvatarUrl() {
@@ -76,7 +93,7 @@ public class User {
 	}
 
 	public void setAvatarUrl(String avatarUrl) {
-		if(avatarUrl == null || avatarUrl.isEmpty()){
+		if(avatarUrl == null){
 			throw new IllegalArgumentException("Invalid User.avatarUrl entered!");
 		}
 		this.avatarUrl = avatarUrl;
@@ -148,11 +165,11 @@ public class User {
 		this.email = email;
 	}
 
-	public void setAddress(String address) {
-		if(address == null || address.isEmpty()){
-			throw new IllegalArgumentException("Invalid User.address entered!");
+	public void setStreetAddress(String streetAddress) {
+		if(streetAddress == null) {
+			this.streetAddress = new String();
 		}
-		this.address = address;
+		this.streetAddress = streetAddress;
 	}
 
 
@@ -178,8 +195,8 @@ public class User {
 		return this.email;
 	}
 
-	public String getAddress() {
-		return this.address;
+	public String getStreetAddress() {
+		return this.streetAddress;
 	}
 	
 	public int getId() {
@@ -202,9 +219,44 @@ public class User {
 		}
 		
 	}
-	
-	
-	
-	
-	
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		if(city == null) {
+			this.city = "";
+		}else {
+		this.city = city;
+		}
+	}
+
+	public int getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(int zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	public boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	public String getTelNumber() {
+		return telNumber;
+	}
+
+	public void setTelNumber(String telNumber) {
+		if(telNumber == null) {
+			this.telNumber = "";
+		}else {
+		this.telNumber = telNumber;
+		}
+	}
 }

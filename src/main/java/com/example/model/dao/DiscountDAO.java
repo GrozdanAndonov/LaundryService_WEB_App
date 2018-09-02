@@ -25,7 +25,7 @@ public class DiscountDAO {
 	public Set<Discount> getDiscountsForOrder(Order order) throws SQLException{
 		Connection con = db.getConn();
 		PreparedStatement ps = con.prepareStatement("SELECT d.id_discount, d.date_started, d.date_ended, value"
-				+ " FROM discount d JOIN order_discount od on d.id_discount = od.id_discount WHERE od.id_order = ?;",Statement.NO_GENERATED_KEYS);
+				+ " FROM discount d JOIN order_discount od on d.id_discount = od.id_discount WHERE od.id_order = ?;",Statement.RETURN_GENERATED_KEYS);
 		ps.setInt(1, order.getId());
 		 ps.executeQuery();
 		 ResultSet rs = ps.getResultSet();

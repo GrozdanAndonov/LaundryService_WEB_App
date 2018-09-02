@@ -37,9 +37,6 @@
             </div>
         </div>
     </div>
-   
-	
-
 		<div class="main main-raised">
 			<div class="profile-content">
 	            <div class="container">
@@ -50,7 +47,7 @@
 			  <div class="alert-icon">
 				<i class="material-icons">check</i>
 			  </div>			  
-		      <b>${msg}</b>
+		      <b>${msgSuccess}</b>
 		    </div>
 		</div>
  </div>

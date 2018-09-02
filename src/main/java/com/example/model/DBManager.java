@@ -10,7 +10,7 @@ public class DBManager {
 	Connection conn;
 
 	public DBManager() {
-		final String DB_IP = "localhost";
+		final String DB_IP = "127.0.0.1";
 		final String DB_PORT = "3306";
 		final String DB_DBNAME = "laundry_service";
 		final String DB_USER = "root";

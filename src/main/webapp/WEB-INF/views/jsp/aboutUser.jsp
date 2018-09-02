@@ -20,7 +20,7 @@
                     <div class="col-md-6 ml-auto mr-auto">
                         <div class="profile">
                             <div class="avatar">
-                                <img src="<c:url value="/img/faces/christian.jpg"/>" alt="Circle Image" class="img-raised rounded-circle img-fluid">
+                                <img src="/LaundryService/getAvatar" alt="Circle Image" class="img-raised rounded-circle img-fluid">
                             </div>
                             <div class="name">
                                 <h3 class="title">${ sessionScope.User.firstName } ${ sessionScope.User.lastName }</h3>
@@ -39,7 +39,7 @@
             <td><strong>Total number of orders:</strong>${ numOrder }</td>      
         </tr>
         <tr>
-            <td><strong>Address : </strong> ${ sessionScope.User.address }</td>
+            <td><strong>Address : </strong> ${ sessionScope.User.city }</td>
             <td><strong>Total number of discounts:</strong>${ numDiscounts }</td>
         </tr>
         <tr>

@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -34,7 +35,7 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = "/logged", method = RequestMethod.POST)
-	public String logged(HttpServletRequest req, HttpSession s, Model model, HttpSession session) throws SQLException {
+	public String logged(HttpServletRequest req, HttpSession s, Model model, HttpSession session) throws SQLException, ParseException {
 		String email = req.getParameter("email");
 		String password = req.getParameter("password");
 	
@@ -46,11 +47,13 @@ public class LoginController {
 		
 		User user = ud.getFullUserByEmail(email);
 		
+		
 		session.setAttribute("User", user);
 		session.setAttribute("logged", true);
 
 		return "redirect:/";
 	}
+	
 	
 	private boolean checkIfEmailAndPasswordExists(String email, String password, Model model) throws SQLException{
 		boolean emailExists = false;

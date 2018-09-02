@@ -5,34 +5,23 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Contacts</title>
+<title>Contact with admin</title>
 <meta
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
 	name="viewport" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <script src='https://www.google.com/recaptcha/api.js'></script>
 <jsp:include page="staticContent.jsp"></jsp:include>
-<style>
-@media screen and (max-height: 575px) {
-	#rc-imageselect, .g-recaptcha {
-		transform: scale(0.77);
-		-webkit-transform: scale(0.77);
-		transform-origin: 0 0;
-		-webkit-transform-origin: 0 0;
-	}
-}
-</style>
 </head>
 <body class="index-page">
-	<jsp:include page="headerNotLogged.jsp"></jsp:include>
+	<jsp:include page="headerLogged.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
 		style="background-image: url('<c:url value="/img/bg2.jpg"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
-						<h1>Index page</h1>
-						<h3>A Badass Bootstrap 4 UI Kit based on Material Design.</h3>
+						<h1>Contact With Admin</h1>
 					</div>
 				</div>
 			</div>
@@ -42,7 +31,9 @@
 	<div class="main main-raised">
 		<div class="section section-basic">
 			<div class="container">
-
+				<div class="title text-center">
+					<h2>Contact form:</h2>
+				</div>
 				<div class="section section-contacts">
 					<div class="row">
 						<div class="col-md-8 ml-auto mr-auto">
@@ -51,49 +42,33 @@
 								your product or agency work into parts. Write a few lines about
 								each one and contact us about any further collaboration. We will
 								responde get back to you in a couple of hours.</h4>
-								
-								
+
+
 							<form class="contact-form" method="POST"
-									action="/LaundryService/contacts">
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label class="bmd-label-floating">Your Name</label> <input
-										type="text" class="form-control" name="name"
-										value="${enteredName}" required>
-									<p class="text-danger">
-										<strong>${errorName}</strong>
-									</p>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label class="bmd-label-floating">Your Email</label>  <input
-										type="email" class="form-control" name="email"
-										value="${enteredEmail}" required>
-									<p class="text-danger">
-										<strong>${errorEmail}</strong>
-									</p>
-										</div>
-									</div>
-								</div>
+								action="/LaundryService/contacts/contactWithAdmin">
 								<div class="form-group">
 									<label for="exampleMessage" class="bmd-label-floating">Your
 										Message</label>
 									<textarea type="text" class="form-control" rows="4"
-								id="exampleMessage" name="text" required>${enteredText}</textarea>
-							<p class="text-danger">
-								<strong>${errorText}</strong>
-							</p>
+										id="exampleMessage" name="text" required>${enteredText}</textarea>
+									<p class="text-danger">
+										<strong>${errorText}</strong>
+									</p>
 								</div>
 								<div class="row">
-									 <div class="col-md-4 ml-auto mr-auto text-center">
+									<div class="col-md-4 ml-auto mr-auto text-center">
 										<div class="g-recaptcha"
 											data-sitekey="6Lc0YlIUAAAAAJsfviOZa0O5Iywijibkj_Q_4gDW"
 											style="float: center; transform: scale(0.77); -webkit-transform: scale(0.77); transform-origin: 0 0; -webkit-transform-origin: 0 0;"></div>
 										<p class="text-danger">
 											<strong>${recaptchaError}</strong>
-										</p> 
+										</p>
+										<p class="text-danger">
+											<strong>${errorMsg}</strong>
+										</p>
+										<p class="text-success">
+											<strong>${msgSuccess}</strong>
+										</p>
 										<button class="btn btn-primary btn-raised">Send
 											Message</button>
 									</div>
@@ -104,13 +79,7 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
-
-
-
-
-
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

@@ -3,16 +3,19 @@ package com.example.controller;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.model.pojo.User;
 import com.example.util.CaptchaSettings;
+import com.example.util.LoggedValidator;
 import com.example.util.MailSender;
 
 
@@ -30,108 +33,133 @@ public class ContactsController {
 	public String contacts(HttpServletRequest request){	
 		return "contacts";
 	}
+	
+	@RequestMapping(value="/contactWithAdmin", method = RequestMethod.GET)
+	public String contactWithAdmins(HttpServletRequest request, HttpSession session, RedirectAttributes attr){	
+		if(LoggedValidator.checksIfUserIsLogged(session)) {
+			return "indexNotLogged";
+		}
+		return "contactViewWithAdmin";
+	}
+	
+	@RequestMapping(value="/contactWithAdmin", method = RequestMethod.POST)
+	public String sendMessageToAdmin(HttpServletRequest request, HttpSession session, Model model, RedirectAttributes attr){	
+		if(LoggedValidator.checksIfUserIsLogged(session)) {
+			return "indexNotLogged";
+		}
 		
-	@RequestMapping(value="/sendMsg", method = RequestMethod.POST)
-	public String sendMessage(HttpServletRequest req){		
+		String text = request.getParameter("text");
+		User user = (User) session.getAttribute("User");
+		if(checkIfInputIsCorrect(text, model, request, attr)) {
+			try {
+				this.sendMail.sendMessage(user.getFirstName()+"-"+user.getLastName(), user.getEmail(), text, request.getRemoteAddr());
+				model.addAttribute("msgSuccess", "Thank you! Your message has been sent successfully!");
+			} catch (AddressException e) {
+				model.addAttribute("errorMsg", "Something went wrong! Please try again later.");
+				model.addAttribute("enteredText",text);
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				e.printStackTrace();
+				model.addAttribute("enteredText",text);
+				model.addAttribute("errorMsg", "Something went wrong! Please try again later.");
+			}
+		}
+		return "redirect:contactWithAdmin";
+	}
+	
+	private boolean checkIfInputIsCorrect(String text, Model model, HttpServletRequest request, RedirectAttributes attr) {
+		boolean	result = true;
+		if(text == null || text.isEmpty()) {
+			attr.addFlashAttribute("errorText", "Add text in the message!");	
+			model.addAttribute("errorText", "Add text in the message!");
+			result = false;
+		}
+		if(!this.captcha.isCaptchaValid(request.getParameter("g-recaptcha-response"))) {
+			attr.addFlashAttribute("recaptchaError", "Validate recaptcha!");
+			model.addAttribute("recaptchaError", "Validate recaptcha!");
+			result = false;
+		}
+		return result;
+	}
+		
+	@RequestMapping(method = RequestMethod.POST)
+	public String sendMessage(HttpServletRequest req, Model model){		
 		String name = req.getParameter("name");
 		String email = req.getParameter("email");
-		String text =  req.getParameter("text");
-		int nameCode = 1;
-		int emailCode = 1;
-		int textCode = 1;
-		int captchaCode = 1;
-		
+		String text = req.getParameter("text");
+		int[] errorResult = new int[4];
+		int langCode = 1;
+		if (LocaleContextHolder.getLocale().toString().equals("en")) {
+			langCode = 0;
+		}
 		String ip = req.getRemoteAddr();
-		
-		if(name.isEmpty()){
-			nameCode = 0;
+
+		if (name.isEmpty()) {
+			errorResult[0] = 1;
 		}
-		if(!email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")){
-			emailCode = 0;
+		if (!email
+				.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
+			errorResult[1] = 1;
 		}
-		if(text.isEmpty()){
-			textCode = 0;
+		if (text.isEmpty()) {
+			errorResult[2] = 1;
 		}
-		if(!this.captcha.isCaptchaValid(req.getParameter("g-recaptcha-response"))){
-			captchaCode = 0;
+		if (!this.captcha.isCaptchaValid(req.getParameter("g-recaptcha-response"))) {
+			errorResult[3] = 1;
 		}
 		try {
-			if(nameCode == 1 && emailCode == 1 && textCode==1 && captchaCode==1){		
-			this.sendMail.sendMessage(name , email, text, ip);
-			return "redirect:success";
-			}else{
-				return "redirect:notSuccess/"+nameCode+"/"+emailCode+"/"+textCode+"/"+captchaCode;
+			if (errorResult[0] == 0 && errorResult[1] == 0 && errorResult[2] == 0 && errorResult[3] == 0) {
+				this.sendMail.sendMessage(name, email, text, ip);
+				if (langCode == 0) {
+					model.addAttribute("msgSuccess", "Thank you! Your message has been sent successfully!");
+				} else {
+					model.addAttribute("msgSuccess", "Съобщението Ви беше изпратено успешно!");
+				}
+				return "successMailSend";
+			} else {
+				model.addAttribute("enteredName", name);
+				model.addAttribute("enteredEmail", email);
+				model.addAttribute("enteredText", text);
+				this.setErrorAtributesWithLanguageCode(langCode, errorResult, model);
 			}
 		} catch (AddressException e) {
 			e.printStackTrace();
 		} catch (MessagingException e) {
 			e.printStackTrace();
-		}		
-		return "index";
+		}
+		return "contacts";
 	}
-	
-	
-	@RequestMapping(value="/success", method = RequestMethod.GET)
-	public String getResponseGood(Model model){
-		int result = 0;
-		/*if(LocaleContextHolder.getLocale().toString().equals("en")){
-			result = 0;
-		}*/
-		if(result==0){
-		model.addAttribute("msg","Thank you! Your message has been sent successfully!");
-		}else{
-			model.addAttribute("msg","Съобщението Ви беше изпратено успешно!");
-		}
-		
-		
-		return "successMailSend";		
-	}
-	@RequestMapping(value="/notSuccess/{nameCode}/{emailCode}/{txtCode}/{recaptchaCode}", method = RequestMethod.GET)
-	public String getResponseBad(Model model,
-			@PathVariable("nameCode") int nameCode,
-			@PathVariable("emailCode") int emailCode,
-			 @PathVariable("txtCode") int txtCode,
-			 @PathVariable("recaptchaCode") int recaptchaCode){
-		int result = 0;
-		/*if(LocaleContextHolder.getLocale().toString().equals("en")){
-			result = 0;
-		}*/
-		if(result==0){
-		model.addAttribute("msg","Processing error. Please, try again!");
-		}else{
-			model.addAttribute("msg","Грешка при обработката. Моля опитайте отново!");
-		}
-		
-		if(nameCode == 0){
-			if(result == 0){
-			model.addAttribute("nameError", "Enter name!");
-			}else{
-				model.addAttribute("nameError", "Въведете име в формата!");
+	private void setErrorAtributesWithLanguageCode(int langCode, int[] errorResult, Model model) {
+		if (errorResult[0] == 1) {
+			if (langCode == 0) {
+				model.addAttribute("errorName", "Enter name!");
+			} else {
+				model.addAttribute("errorName", "Въведете име в формата!");
 			}
 		}
-		if(emailCode == 0){
-			if(result == 0){
-			model.addAttribute("emailError", "Enter valid email!");
-			}else{
-				model.addAttribute("emailError", "Въведете валиден имейл!");
+
+		if (errorResult[1] == 1) {
+			if (langCode == 0) {
+				model.addAttribute("errorEmail", "Enter valid email!");
+			} else {
+				model.addAttribute("errorEmail", "Въведете валиден имейл!");
 			}
 		}
-		if(txtCode == 0){
-			if(result == 0){
-			model.addAttribute("textError", "Enter text!");
-			}else{
-				model.addAttribute("textError", "Въведете текст в съобщението!");
+
+		if (errorResult[2] == 1) {
+			if (langCode == 0) {
+				model.addAttribute("errorText", "Enter text!");
+			} else {
+				model.addAttribute("errorText", "Въведете текст в съобщението!");
 			}
 		}
-		if(recaptchaCode == 0){
-			if(result == 0){
-			model.addAttribute("recaptchaError", "Validate recaptcha!");	
-			}else{
+		if (errorResult[3] == 1) {
+			if (langCode == 0) {
+				model.addAttribute("recaptchaError", "Validate recaptcha!");
+			} else {
 				model.addAttribute("recaptchaError", "Неуспешна верификация!");
 			}
-		}		
-		
-		return "NotSuccess";		
+		}
 	}
-	
+
 }

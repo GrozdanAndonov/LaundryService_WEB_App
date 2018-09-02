@@ -46,6 +46,5 @@ public class MailSender {
 		msg.setSubject("SAIT-LAUNDRY-SERVICE");
 		msg.setText(txt);
 		Transport.send(msg);		
-		
 	}
 }

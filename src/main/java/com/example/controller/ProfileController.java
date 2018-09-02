@@ -2,10 +2,15 @@ package com.example.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.tika.mime.MimeType;
@@ -15,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,104 +39,153 @@ public class ProfileController {
 	@Autowired
 	UserDAO ud;
 	
-   
-	
 @RequestMapping(value="uploadPicture", method=RequestMethod.POST)
-	public String uploading(@RequestParam("failche") MultipartFile file, HttpServletRequest req, HttpSession session, Model m){
-		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "redirect:/";
-		}
-		
-		User user = (User) session.getAttribute("User");
-		
-		String filePath =WebInitializer.LOCATION 
-				 +File.separator+ "users"
-				 +File.separator + user.getId()+"-"+user.getLastName()
-				 +File.separator + "avatar";
-		
-		if(!file.isEmpty()) {
-			MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
-			MimeType type = null;
-			String ext = "";
-			try {
-				type = allTypes.forName(file.getContentType());
-			} catch (MimeTypeException e) {
-				e.printStackTrace();
-			}
-			if(type != null){
-			ext = type.getExtension(); 
+	public String uploading(@RequestParam("userAvatar") MultipartFile file, HttpServletRequest req, HttpSession session, Model model){
+	
+			if(LoggedValidator.checksIfUserIsLogged(session)){
+			return "indexNotLogged";
 			}
 			
-			String[] allowedExt = new String[] {".jpg", "jpeg", ".png", ".gif" };
-			boolean isAllowed = false;
+			User user = (User) session.getAttribute("User");
+			String filePath = WebInitializer.LOCATION+File.separator + "users" + File.separator + user.getId()+"-"+user.getLastName()+
+					File.separator+"avatar";
 			
-			for (String string : allowedExt) {
-				if(ext.contains(string)){
-					isAllowed = true;
-				}
-			}
+			String extension = this.getExtensionForFile(file);
+			
+			boolean isAllowed = this.checkIfExtensionForFileisAllowed(extension);
 			
 			if(!isAllowed) {
-				m.addAttribute("errorExtension", "You must upload a pic from one of the given extensions!");
+				model.addAttribute("errorFile", "Upload file with the givven extensions!");
+				addAtributesInModel(user, model);
+				return "settingsUser";
+			}
+		
+			File folders = new File(filePath);
+			folders.mkdirs();
+			String fullPathToFile = "";
+			try {
+				fullPathToFile = this.copyFile(user, file, filePath, extension, model);
+			} catch (IllegalStateException | IOException e) {
+				model.addAttribute("errorFile", "Sorry, try again later!");
+				e.printStackTrace();
+				addAtributesInModel(user, model);
+				return "settingsUser";
+			}
+			try {
+				ud.insertAvatarUrl(user, fullPathToFile);
+				user.setAvatarUrl(fullPathToFile);
+				session.setAttribute("User", user);
+			} catch (SQLException e) {
+				addAtributesInModel(user, model);
+				model.addAttribute("errorFile", "Sorry, try again later!");
+				e.printStackTrace();
 				return "settingsUser";
 			}
 			
-			 File folders = new File( filePath );
-			    folders.mkdirs();
-			
-			    File f = new File( filePath 
-						 + File.separator
-						 + user.getId()+"."+user.getLastName() + ext);
+			model.addAttribute("successFile", "You have successfully uploaded your file.");
+			 addAtributesInModel(user, model);
+			return "settingsUser";
+	
+}
+
+	private String copyFile(User user, MultipartFile file, String filePath, String extension, Model model) throws IllegalStateException, IOException {
+		String fullPathToFile = filePath+File.separator+user.getFirstName()+"-"+user.getLastName()+extension;
+		File f = new File(fullPathToFile);
+			file.transferTo(f);
+			return fullPathToFile;
+	}
+
+	private boolean checkIfExtensionForFileisAllowed(String extension) {
+		boolean isAllowedExtension = false;
+		String[] allowedExt = new String[] {".jpg", ".jpeg", ".png" };
 		
-			    	try {
-						file.transferTo(f);
-					} catch (IllegalStateException | IOException e) {
-						e.printStackTrace();
-					}
-			    try {
-					ud.insertAvatarUrl(user, filePath);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+		for (String ext : allowedExt) {
+			if(ext.equals(extension)) {
+				isAllowedExtension = true;
+			}
 		}
 		
-		m.addAttribute("successUpload", "You have successfully uploaded your file.");
-		return "settingsUser";
+		return isAllowedExtension;
+	}
+	
+	private String getExtensionForFile(MultipartFile file) {
+		MimeType type = null;
+		try {
+			MimeTypes types = MimeTypes.getDefaultMimeTypes();
+			 type = types.forName(file.getContentType());
+		} catch (MimeTypeException e) {
+			e.printStackTrace();
+		}
+			return type.getExtension();
+	}
+
+	private void addAtributesInModel(User user, Model model) {
+		model.addAttribute("firstName", user.getFirstName());
+		model.addAttribute("lastName",user.getLastName());
+		model.addAttribute("email",user.getEmail());
+		model.addAttribute("streetAddress", user.getStreetAddress());
+		model.addAttribute("city", user.getCity());
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		model.addAttribute("dateOfCreation",dateFormat.format(user.getDateCreated()));
+		model.addAttribute("zip", user.getZipCode());
 	}
 	
 	
-	
-	
-	
-	
-	/*@RequestMapping(value = "/avatar", method = RequestMethod.GET)
-	public void displayAvatar(HttpSession s, HttpServletResponse resp, HttpServletRequest req ) {
-		User u = (User) req.getSession().getAttribute("user");
-		String avatarUrl = null;
+	@RequestMapping(value="getAvatar", method=RequestMethod.GET)
+	public void getUserAvatar(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+		User user = (User) session.getAttribute("User");
+		String defaultUrl = WebInitializer.LOCATION+
+				File.separator+"default-avatar"+File.separator+"default.jpg";
 		
-			avatarUrl =LOCATION 
-				 	  +File.separator + "users"
-				 	  +File.separator + u.getUsername()
-				 	  +File.separator + "avatar"
-					  +File.separator + "avatar.jpg";
-		
-		if(avatarUrl == null) {
-			avatarUrl = LOCATION 
-					 	+File.separator + "Administration"
-					 	+File.separator + "userDefaultPic"
-					 	+File.separator + "default.jpg";
+		String avatarUrl = user.getAvatarUrl();
+
+		if(avatarUrl == null || avatarUrl.isEmpty()) {
+			avatarUrl = defaultUrl;
 		}
 		
 		File file = new File(avatarUrl);
-		
-		try (OutputStream out = resp.getOutputStream()) {
-		    Path path = file.toPath();
+		try {
+			OutputStream out = response.getOutputStream();
+			Path path = file.toPath();
 		    Files.copy(path, out);
 		    out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	*/
+	
+	@RequestMapping(value="getAvatarsForUsers/adminId={userId}", method=RequestMethod.GET)
+	public void getUserAvatarById(@PathVariable("userId") int idUser, HttpServletResponse response) {
+		User user;
+		String avatarUrl;
+		String defaultUrl = WebInitializer.LOCATION+
+				File.separator+"default-avatar"+File.separator+"default.jpg";
+		System.out.println(idUser);
+		try {
+			user = ud.getUserById(idUser);
+			 avatarUrl = user.getAvatarUrl();
+			 if(avatarUrl == null || avatarUrl.isEmpty()) {
+					avatarUrl = defaultUrl;
+				}
+			 File file = new File(avatarUrl);
+			 OutputStream out = response.getOutputStream();
+				Path path = file.toPath();
+			    Files.copy(path, out);
+			    out.flush();
+			    System.out.println(avatarUrl);
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	
+		
+		
+		
+	}
+	
+
 	
 }
+
+
