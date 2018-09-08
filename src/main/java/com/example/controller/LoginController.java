@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.model.dao.UserDAO;
 import com.example.model.pojo.User;
+import com.example.util.LoggedValidator;
 
 
 @Controller
@@ -22,9 +23,14 @@ public class LoginController {
 	@Autowired
 	UserDAO ud;
 	
-	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login() {
+	public String login(HttpSession session) {
+		if(LoggedValidator.checksIfUserIsLogged(session)) {
+			return  "userViews/indexLogged";
+		}
+		if(LoggedValidator.checksIfAdminIsLogged(session)) {
+			return "adminViews/adminIndexPage";
+		}
 		return "notLoggedIn/login";
 	}
 	
@@ -36,6 +42,12 @@ public class LoginController {
 	
 	@RequestMapping(value = "/logged", method = RequestMethod.POST)
 	public String logged(HttpServletRequest req, HttpSession s, Model model, HttpSession session) throws SQLException, ParseException {
+		if(LoggedValidator.checksIfUserIsLogged(session)) {
+			return  "userViews/indexLogged";
+		}
+		if(LoggedValidator.checksIfAdminIsLogged(session)) {
+			return "adminViews/adminIndexPage";
+		}
 		String email = req.getParameter("email");
 		String password = req.getParameter("password");
 	
@@ -46,11 +58,9 @@ public class LoginController {
 		}
 		
 		User user = ud.getFullUserByEmail(email);
-		
+		ud.setLastLoginDateForUser(user);
 		
 		session.setAttribute("User", user);
-		session.setAttribute("logged", true);
-
 		return "redirect:/";
 	}
 	

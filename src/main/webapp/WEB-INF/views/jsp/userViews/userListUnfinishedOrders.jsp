@@ -175,7 +175,7 @@
 												<td><c:out value="${ order.dateFinishedForView }"></c:out></td>
 												<td class="text-right"><c:out value="${ order.cost }"></c:out>lv</td>
 												<td class="td-actions text-right"><a
-													href="/LaundryService/orderList/orderDetails/${ order.id }"><button
+													href="/LaundryService/orderList/unfinishedOrderDetails/${ order.id }"><button
 															type="button" rel="tooltip" title="View Profile"
 															class="btn btn-info btn-simple btn-xs btn-link">
 															<i class="fa fa-user"></i>

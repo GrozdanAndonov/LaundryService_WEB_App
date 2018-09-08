@@ -34,17 +34,40 @@ public class ContactsController {
 		return "notLoggedIn/contacts";
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param request
+	 * @param session
+	 * @param attr
+	 * @return
+	 */
 	@RequestMapping(value="/contactWithAdmin", method = RequestMethod.GET)
 	public String contactWithAdmins(HttpServletRequest request, HttpSession session, RedirectAttributes attr){	
-		if(LoggedValidator.checksIfUserIsLogged(session)) {
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		return "userViews/contactViewWithAdmin";
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param request
+	 * @param session
+	 * @param model
+	 * @param attr
+	 * @return
+	 */
 	@RequestMapping(value="/contactWithAdmin", method = RequestMethod.POST)
 	public String sendMessageToAdmin(HttpServletRequest request, HttpSession session, Model model, RedirectAttributes attr){	
-		if(LoggedValidator.checksIfUserIsLogged(session)) {
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		

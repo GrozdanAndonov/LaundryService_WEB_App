@@ -41,11 +41,6 @@ public class ProfileController {
 	
 @RequestMapping(value="uploadPicture", method=RequestMethod.POST)
 	public String uploading(@RequestParam("userAvatar") MultipartFile file, HttpServletRequest req, HttpSession session, Model model){
-	
-			if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "notLoggedIn/indexNotLogged";
-			}
-			
 			User user = (User) session.getAttribute("User");
 			String filePath = WebInitializer.LOCATION+File.separator + "users" + File.separator + user.getId()+"-"+user.getLastName()+
 					File.separator+"avatar";
@@ -133,54 +128,30 @@ public class ProfileController {
 	
 	@RequestMapping(value="getAvatar", method=RequestMethod.GET)
 	public void getUserAvatar(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
-		User user = (User) session.getAttribute("User");
-		String defaultUrl = WebInitializer.LOCATION+
-				File.separator+"default-avatar"+File.separator+"default.jpg";
-		
-		String avatarUrl = user.getAvatarUrl();
+		if(LoggedValidator.checksIfUserIsLogged(session)){
+			User user = (User) session.getAttribute("User");
+			String defaultUrl = WebInitializer.LOCATION+
+					File.separator+"default-avatar"+File.separator+"default.jpg";
+			
+			String avatarUrl = user.getAvatarUrl();
 
-		if(avatarUrl == null || avatarUrl.isEmpty()) {
-			avatarUrl = defaultUrl;
-		}
-		
-		File file = new File(avatarUrl);
-		try {
-			OutputStream out = response.getOutputStream();
-			Path path = file.toPath();
-		    Files.copy(path, out);
-		    out.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@RequestMapping(value="getAvatarsForUsers/adminId={userId}", method=RequestMethod.GET)
-	public void getUserAvatarById(@PathVariable("userId") int idUser, HttpServletResponse response) {
-		User user;
-		String avatarUrl;
-		String defaultUrl = WebInitializer.LOCATION+
-				File.separator+"default-avatar"+File.separator+"default.jpg";
-		try {
-			user = ud.getUserById(idUser);
-			 avatarUrl = user.getAvatarUrl();
-			 if(avatarUrl == null || avatarUrl.isEmpty()) {
-					avatarUrl = defaultUrl;
-				}
-			 File file = new File(avatarUrl);
-			 OutputStream out = response.getOutputStream();
+			if(avatarUrl == null || avatarUrl.isEmpty()) {
+				avatarUrl = defaultUrl;
+			}
+			
+			File file = new File(avatarUrl);
+			try {
+				OutputStream out = response.getOutputStream();
 				Path path = file.toPath();
 			    Files.copy(path, out);
 			    out.flush();
-		} catch (SQLException | IOException e) {
-			e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		
-		
-	
-		
-		
-		
 	}
+	
+	
 	
 
 	

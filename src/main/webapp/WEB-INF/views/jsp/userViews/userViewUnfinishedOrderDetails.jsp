@@ -61,6 +61,7 @@
 							<input type="text" class="form-control" id="inputZip"  value="${order.telNumber}" disabled>
 						</div>
 					</div>
+				
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label for="inputCity">Date of creation</label> 

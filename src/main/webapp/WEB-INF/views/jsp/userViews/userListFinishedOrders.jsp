@@ -33,79 +33,95 @@
 				<div class="title text-center">
 					<h2>Search orders</h2>
 				</div>
-			<div class="section">
-				<form method="POST"
-					action="/LaundryService/orderList/searchOrdersBetweenDates">
-				<div class="form-row">
-						<div class="form-group col-md-4">
-						<label class="label-control">From date</label> <input id="datetimepicker1"
-							type="text" class="form-control datetimepicker" name="firstDate"
-							value="${ firstDate }" />
-					</div>
-					<div class="form-group col-md-4">
-						<label class="label-control">To date</label> <input id="datetimepicker2"
-							type="text" class="form-control datetimepicker" name="secondDate"
-							value="${ secondDate }" />
-					</div>
-					<div class="form-group col-md-4 text-center">
-					<input class="btn btn-primary btn-round" type="submit" value="Search">
+				<div class="section">
+					<form method="POST"
+						action="/LaundryService/orderList/searchOrdersBetweenDates">
+						<div class="form-row">
+							<div class="form-group col-md-4">
+								<label class="label-control">From date</label> <input
+									id="datetimepicker1" type="text"
+									class="form-control datetimepicker" name="firstDate"
+									value="${ firstDate }" />
+							</div>
+							<div class="form-group col-md-4">
+								<label class="label-control">To date</label> <input
+									id="datetimepicker2" type="text"
+									class="form-control datetimepicker" name="secondDate"
+									value="${ secondDate }" />
+							</div>
+							<div class="form-group col-md-4 text-center">
+								<input class="btn btn-primary btn-round" type="submit"
+									value="Search">
+							</div>
+						</div>
+					</form>
+				</div>
+			<c:if test="${showContent != null}">	
+				<div class="col-md-8 ml-auto mr-auto">
+					<div class="title text-center">
+						<h2>Orders list</h2>
 					</div>
 				</div>
-				</form>
-			</div>
-			<c:if test="${orders != null }">
-			<div class="col-md-8 ml-auto mr-auto">
-			<div class="title text-center">
-					<h2>Orders list</h2>
-				</div>
-				</div>
-			<table class="table">
-    <thead>
-        <tr>
-            <th class="text-center">#</th>
-            <th>Name</th>
-            <th>Date creation</th>
-            <th>Date finished</th>
-            <th>Price</th>
-            <th class="text-right">Total:<c:out value="${ total }"></c:out>lv</th>
-        </tr>
-    </thead>
-    <tbody>
-    <c:forEach items="${ orders }" var="order">
-        <tr>
-            <td class="text-center"><c:out value="${ order.id }"></c:out></td>
-            <td><c:out value="${ order.firstName }"></c:out> <c:out value="${ order.lastName }"></c:out></td>
-            <td><c:out value="${ order.dateCreatedForView }"></c:out></td>
-            <td><c:out value="${ order.dateFinishedForView }"></c:out></td>
-            <td class="text-right"><c:out value="${ order.cost }"></c:out>lv</td>
-            <td class="td-actions text-right">
-                	<a href="/LaundryService/orderList/orderDetails/${ order.id }"><button type="button" rel="tooltip" title="View Profile" class="btn btn-info btn-simple btn-xs btn-link">
-                    <i class="fa fa-user"></i>
-                </button> </a>
-            </td>
-        </tr>
-           </c:forEach>
-    </tbody>
-</table>
-</c:if>
-			</div>
+				
+				<c:choose>
+				<c:when test="${orders != null &&  !orders.isEmpty()}">
+					<table class="table">
+						<thead>
+							<tr>
+								<th class="text-center">#</th>
+								<th>Name</th>
+								<th>Date creation</th>
+								<th>Date finished</th>
+								<th>Price</th>
+								<th class="text-right">Total:<c:out value="${ total }"></c:out>lv
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach items="${ orders }" var="order">
+								<tr>
+									<td class="text-center"><c:out value="${ order.id }"></c:out></td>
+									<td><c:out value="${ order.firstName }"></c:out> <c:out
+											value="${ order.lastName }"></c:out></td>
+									<td><c:out value="${ order.dateCreatedForView }"></c:out></td>
+									<td><c:out value="${ order.dateFinishedForView }"></c:out></td>
+									<td class="text-right"><c:out value="${ order.cost }"></c:out>lv</td>
+									<td class="td-actions text-right"><a
+										href="/LaundryService/orderList/orderDetails/${ order.id }"><button
+												type="button" rel="tooltip" title="View Profile"
+												class="btn btn-info btn-simple btn-xs btn-link">
+												<i class="fa fa-user"></i>
+											</button> </a></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</c:when>
+				<c:otherwise>
+					<div class="title text-center">
+						<h3>You have no finished orders.</h3>
+					</div>
+				</c:otherwise>
+				</c:choose>
+				</c:if>
 			</div>
 		</div>
+	</div>
 	<jsp:include page="../footer.jsp"></jsp:include>
 </body>
 <script>
-$('.datetimepicker').datetimepicker({
-    icons: {
-        time: "fa fa-clock-o",
-        date: "fa fa-calendar",
-        up: "fa fa-chevron-up",
-        down: "fa fa-chevron-down",
-        previous: 'fa fa-chevron-left',
-        next: 'fa fa-chevron-right',
-        today: 'fa fa-screenshot',
-        clear: 'fa fa-trash',
-        close: 'fa fa-remove'
-    }
-});
+	$('.datetimepicker').datetimepicker({
+		icons : {
+			time : "fa fa-clock-o",
+			date : "fa fa-calendar",
+			up : "fa fa-chevron-up",
+			down : "fa fa-chevron-down",
+			previous : 'fa fa-chevron-left',
+			next : 'fa fa-chevron-right',
+			today : 'fa fa-screenshot',
+			clear : 'fa fa-trash',
+			close : 'fa fa-remove'
+		}
+	});
 </script>
 </html>

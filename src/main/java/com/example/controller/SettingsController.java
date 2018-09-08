@@ -28,7 +28,10 @@ public class SettingsController {
 	
 	@RequestMapping(value="/aboutUser")
 	public String aboutUser(Model model, HttpSession session){
-		if(LoggedValidator.checksIfUserIsLogged(session)) {
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		model.addAttribute("numOrder",0);
@@ -43,7 +46,10 @@ public class SettingsController {
 	
 	@RequestMapping(value="/settings")
 	public String settings( Model model, HttpSession session){
-		if(LoggedValidator.checksIfUserIsLogged(session)) {
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
@@ -54,7 +60,10 @@ public class SettingsController {
 	
 	@RequestMapping(value="/settingsWithErrors")
 	public String settingsWithErrors( Model model, HttpSession session){
-		if(LoggedValidator.checksIfUserIsLogged(session)) {
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		return "userViews/settingsUser";
@@ -63,7 +72,7 @@ public class SettingsController {
 	
 	@RequestMapping(value="changeUserData", method = RequestMethod.POST)
 	public String changeUserValues(HttpSession session, HttpServletRequest req, Model model, RedirectAttributes attr) {
-		if(LoggedValidator.checksIfUserIsLogged(session)) {
+		if(!LoggedValidator.checksIfUserIsLogged(session)) {
 			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
@@ -75,13 +84,16 @@ public class SettingsController {
 		String city = req.getParameter("city");
 		String zip = req.getParameter("zip");
 		String telNumber = req.getParameter("telNumber");
-		int zip2 = Integer.parseInt(zip);
+		String bulstat = req.getParameter("bulstat");
+		
 		
 		if(!firstName.equals(user.getFirstName())|| !lastName.equals(user.getLastName()) || !email.equals(user.getEmail()) 
-				|| !streetAddress.equals(user.getStreetAddress()) || !city.equals(user.getCity()) || !(zip2 == user.getZipCode()) || !telNumber.equals(user.getTelNumber())) {
-			if(checkIfInputIsCorrect( firstName,  lastName,  city,  streetAddress,  email, telNumber, attr)) {
+				|| !streetAddress.equals(user.getStreetAddress()) || !city.equals(user.getCity()) || !(zip.equals(String.valueOf(user.getZipCode())))
+				|| !telNumber.equals(user.getTelNumber()) || !bulstat.equals(user.getBulstatNumber())) {
+			if(checkIfInputIsCorrect( firstName,  lastName,  city,  streetAddress,  email, telNumber, bulstat, zip, attr)) {
 			try {
-				if(ud.updateUser(user.getId(), firstName, lastName, email, streetAddress, city, zip2, telNumber)) {
+				int zip2 = Integer.parseInt(zip);
+				if(ud.updateUser(user.getId(), firstName, lastName, email, streetAddress, city, zip2, telNumber, bulstat)) {
 					user.setFirstName(firstName);
 					user.setLastName(lastName);
 					user.setEmail(email);
@@ -89,8 +101,9 @@ public class SettingsController {
 					user.setStreetAddress(streetAddress);
 					user.setZipCode(zip2);
 					user.setTelNumber(telNumber);
+					user.setBulstatNumber(bulstat);
 					attr.addFlashAttribute("msgSuccess", "Changes made successfully!");
-					addAtributesInRedirect(user, firstName, lastName, email, streetAddress, city, zip, telNumber,attr);
+					addAtributesInRedirect(user, firstName, lastName, email, streetAddress, city, zip, telNumber, bulstat,attr);
 					return "redirect:settingsWithErrors";
 				}
 			} catch (SQLException e) {
@@ -99,42 +112,50 @@ public class SettingsController {
 			}
 			}
 		}
-		addAtributesInRedirect(user, firstName, lastName, email, streetAddress, city, zip, telNumber,attr);
+		addAtributesInRedirect(user, firstName, lastName, email, streetAddress, city, zip, telNumber, bulstat,attr);
 		return "redirect:settingsWithErrors";
 	}
 	
 	
-	private boolean checkIfInputIsCorrect(String firstName, String lastName, String city, String streetAddress, String email, String telNumber, RedirectAttributes attr) {
+	private boolean checkIfInputIsCorrect(String firstName, String lastName, String city, String streetAddress, String email, String telNumber, String bulstat, String zip, RedirectAttributes attr) {
 		boolean result = true;
-		if(firstName.isEmpty()) {
-			attr.addFlashAttribute("firstNameError", "First name must not be empty!");
+		if(!firstName.matches("^\\D{2,}$")) {
+			attr.addFlashAttribute("firstNameError", "First name is not valid!");
 			result = false;
 		}
-		if(telNumber.isEmpty()) {
-			attr.addFlashAttribute("telNumberError", "Enter valid telephone number!");
+		if(!telNumber.matches("^[0-9]{10}$")) {
+			attr.addFlashAttribute("telNumberError", "Enter valid telephone number! Example: 0888111222");
 			result = false;
 		}
-		if(lastName.isEmpty()) {
-			attr.addFlashAttribute("lastNameError", "Last name must not be empty!");
+		if(!lastName.matches("^\\D{2,}$")) {
+			attr.addFlashAttribute("lastNameError", "Last name is not valid!");
 			result = false;
 		}
-		if(city.isEmpty()) {
-			attr.addFlashAttribute("cityError", "City must not be empty!");
+		if(!city.matches("^\\D{2,}$")) {
+			attr.addFlashAttribute("cityError", "City is not valid!");
 			result = false;
 		}
 		if(!email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
 			attr.addFlashAttribute("emailError","Enter valid email address!");
 			result = false;
 		}
-		if(streetAddress.isEmpty()) {
-			attr.addFlashAttribute("streetError", "Street address must not be empty!");
+		if(!streetAddress.matches("^[\\w\\s]{2,}$")) {
+			attr.addFlashAttribute("streetError", "Street address must be valid! Example: Goce Delchev 4");
+			result = false;
+		}
+		if(!bulstat.matches("^[0-9]{9}$")) {
+			attr.addFlashAttribute("bulstatError", "Enter valid bulstat! Example: 12345678");
+			result = false;
+		}
+		if(!zip.matches("^\\d{2,}$")) {
+			attr.addFlashAttribute("zipError", "Enter valid zip code! Example: 2800");
 			result = false;
 		}
 		return result;
 	}
 	
 	
-	private void addAtributesInRedirect(User user, String firstName, String lastName, String email, String streetAddress,String city, String zip, String telNumber, RedirectAttributes attr) {
+	private void addAtributesInRedirect(User user, String firstName, String lastName, String email, String streetAddress,String city, String zip, String telNumber, String bulstat,RedirectAttributes attr) {
 		attr.addFlashAttribute("firstName", firstName);
 		attr.addFlashAttribute("lastName", lastName);
 		attr.addFlashAttribute("email", email);
@@ -144,6 +165,7 @@ public class SettingsController {
 		attr.addFlashAttribute("dateOfCreation",dateFormat.format(user.getDateCreated()));
 		attr.addFlashAttribute("zip", zip);
 		attr.addFlashAttribute("telNumber", telNumber);
+		attr.addFlashAttribute("bulstat",bulstat);
 	}
 	private void addAtributesInModel(User user, Model model) {
 		model.addAttribute("firstName", user.getFirstName());
@@ -155,6 +177,7 @@ public class SettingsController {
 		model.addAttribute("dateOfCreation",dateFormat.format(user.getDateCreated()));
 		model.addAttribute("zip", user.getZipCode());
 		model.addAttribute("telNumber", user.getTelNumber());
+		model.addAttribute("bulstat", user.getBulstatNumber());
 	}
 	
 }

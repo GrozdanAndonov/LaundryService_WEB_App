@@ -37,11 +37,23 @@ public class ListOrdersController {
 	
 	private static int userOrderForEditId = 0;
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param session
+	 * @param model
+	 * @param req
+	 * @return
+	 */
 	@RequestMapping(value="showFinishedOrderListPage", method = RequestMethod.GET)
 	public String listOrderPage(HttpSession session, Model model, HttpServletRequest req) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
-			return "notLoggedIn/indexNotLogged";
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
+				return "notLoggedIn/indexNotLogged";
 		}
+		
 		User user = (User) session.getAttribute("User");
 		String newDate = DateFormatConverter.convertFromDBToSearchingCalendarsView(user.getDateCreated());
 		String curDate = DateFormatConverter.convertFromDBToSearchingCalendarsView(new Date());
@@ -51,9 +63,22 @@ public class ListOrdersController {
 		return "userViews/userListFinishedOrders";
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param session
+	 * @param req
+	 * @param attr
+	 * @return
+	 * @throws ParseException
+	 * @throws SQLException
+	 */
 	@RequestMapping(value="searchOrdersBetweenDates", method = RequestMethod.POST)
 	public String searchOrdersByDate(HttpSession session,  HttpServletRequest req,  RedirectAttributes attr) throws ParseException, SQLException {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
@@ -67,18 +92,42 @@ public class ListOrdersController {
 		return "redirect:showFinishedOrderListPage";
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param orderId
+	 * @param session
+	 * @param model
+	 * @return
+	 * @throws SQLException
+	 */
 	@RequestMapping(value="orderDetails/{orderId}", method = RequestMethod.GET)
 	public String showOrderDetails(@PathVariable int orderId, HttpSession session, Model model) throws SQLException {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		setDataForOrderDetails(session, orderId, model);
 		return "userViews/userViewOrderDetails";
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param orderId
+	 * @param session
+	 * @param model
+	 * @return
+	 * @throws SQLException
+	 */
 	@RequestMapping(value="unfinishedOrderDetails/{orderId}", method = RequestMethod.GET)
 	public String showUnfinishedOrderDetails(@PathVariable int orderId, HttpSession session, Model model) throws SQLException {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		setDataForOrderDetails(session, orderId, model);
@@ -91,9 +140,20 @@ public class ListOrdersController {
 		model.addAttribute("order", order);
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param session
+	 * @param model
+	 * @return
+	 * @throws SQLException
+	 */
 	@RequestMapping(value="showOpenListOrderPage", method = RequestMethod.GET)
 	public String showOpenOrderList(HttpSession session, Model model) throws SQLException {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		
@@ -106,11 +166,24 @@ public class ListOrdersController {
 		return "userViews/userListUnfinishedOrders";
 	}
 	
+	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param attr
+	 * @param session
+	 * @param req
+	 * @return
+	 */
 	@RequestMapping(value="findCheckedAndUncheckedOrders", method = RequestMethod.POST)
 	public String showcheckedAndUncheckedOrders(RedirectAttributes attr, HttpSession session,  HttpServletRequest req) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
+		
 		User user = (User) session.getAttribute("User");
 		String dateFrom = ""; 
 		String dateTo = "";
@@ -127,10 +200,20 @@ public class ListOrdersController {
 		return "redirect:showOpenListOrderPage";
 	}
 	
-	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param orderId
+	 * @param session
+	 * @param attr
+	 * @return
+	 */
 	@RequestMapping(value="/deleteUncheckedOrder/{orderId}", method = RequestMethod.GET)
 	public String deleteOrder(@PathVariable int orderId, HttpSession session, RedirectAttributes attr) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
@@ -139,17 +222,28 @@ public class ListOrdersController {
 			attr.addFlashAttribute("msgDeletedOrderSuccess", "Order has been deleted successfully!");
 		} catch (SQLException e) {
 			e.printStackTrace();
-			attr.addFlashAttribute("msgDeletedOrderError", "Something went wrong! Please try again later!");
+			attr.addFlashAttribute("msgDeletedOrderError", "Something went wrong! Please try again later!");//pass error code to fmt message
 		}
 		setDataForUnfinishedOrders(attr, user, staticDateFrom, staticDateTo);
 		
 		return "redirect:/orderList/showOpenListOrderPage";
 	}
 	
-
+	/**
+	 * Secured if not user
+	 * 
+	 * @param orderId
+	 * @param session
+	 * @param attr
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value="editOrder/{orderId}", method = RequestMethod.GET)
 	public String editOrder(@PathVariable int orderId, HttpSession session, RedirectAttributes attr, Model model) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
@@ -174,9 +268,20 @@ public class ListOrdersController {
 		return "userViews/userEditOrder";
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param session
+	 * @param req
+	 * @param attr
+	 * @return
+	 */
 	@RequestMapping(value="editCurrentOrder", method = RequestMethod.POST)
 	public String editOrder(HttpSession session, HttpServletRequest req, RedirectAttributes attr) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		
@@ -211,17 +316,36 @@ public class ListOrdersController {
 		return "redirect:showEditOrderPageWithErrors";
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping(value="showEditOrderPageWithErrors", method = RequestMethod.GET)
 	public String showErrorsForEditOrder(HttpSession session) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		return "userViews/userEditOrder";
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param session
+	 * @param attr
+	 * @return
+	 */
 	@RequestMapping(value = "backToOpenListOrderPage", method = RequestMethod.GET)
 	public String backToOpenListOrderPage( HttpSession session, RedirectAttributes attr) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
@@ -229,9 +353,19 @@ public class ListOrdersController {
 		return "redirect:showOpenListOrderPage";
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param session
+	 * @param attr
+	 * @return
+	 */
 	@RequestMapping(value="backToFinishedListOrderPage", method = RequestMethod.GET)
 	public String backToFinishedListOrderPage(HttpSession session, RedirectAttributes attr) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		User user = (User) session.getAttribute("User");
@@ -253,6 +387,7 @@ public class ListOrdersController {
 		
 		attr.addFlashAttribute("orders", orders);
 		attr.addFlashAttribute("total",total);
+		attr.addFlashAttribute("showContent",new Object());
 	}
 	
 	/**
@@ -299,6 +434,7 @@ public class ListOrdersController {
 		return result;
 	}
 
+	
 	private void setDataForUnfinishedOrders(RedirectAttributes attr, User user, String dateFrom, String dateTo) {
 		Set<Order> uncheckedOrders = null;
 		Set<Order> checkedOrders = null;

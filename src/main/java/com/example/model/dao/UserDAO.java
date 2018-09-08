@@ -70,7 +70,9 @@ public class UserDAO {
 	public User getUserById(int id) throws SQLException {
 		Connection c = db.getConn();
 		PreparedStatement ps = c.prepareStatement(
-				"SELECT  id_user, first_name, last_name, password, email, city, streetAddress, rating, avatar_url,isAdmin, date_created, zipCode, telNum FROM user WHERE id_user = ?;",
+				"SELECT  id_user, first_name, last_name, password, email, city,"
+				+ " streetAddress, rating, avatar_url,isAdmin, date_created, zipCode, telNum,"
+				+ "bulstat, last_login_date, default_language FROM user WHERE id_user = ?;",
 				Statement.RETURN_GENERATED_KEYS);
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
@@ -82,6 +84,7 @@ public class UserDAO {
 		return new User(rs.getInt("id_user"), rs.getString("first_name"), rs.getString("last_name"),
 				rs.getString("email"), rs.getString("city"), rs.getInt("zipCode"), rs.getBoolean("isAdmin"),
 				rs.getString("telNum"), rs.getString("streetAddress"), avatarUrl, rs.getDate("date_created"),
+				rs.getTimestamp("last_login_date"), rs.getString("bulstat"), rs.getString("default_language"),
 				rs.getInt("rating"), od.getOrdersForUser(user), cd.getAllCommentsForUser(user));
 	}
 
@@ -122,7 +125,7 @@ public class UserDAO {
 	public User getFullUserByEmail(String email) throws SQLException, ParseException {
 		Connection c = db.getConn();
 		PreparedStatement ps = c.prepareStatement(
-				"SELECT id_user, first_name, last_name, password, email, city, streetAddress,zipCode, rating, avatar_url,isAdmin, date_created, telNum  FROM user WHERE email = ?;",
+				"SELECT id_user, first_name, last_name, password, email, city, streetAddress,zipCode, rating, avatar_url,isAdmin, date_created, telNum, default_language, bulstat, last_login_date  FROM user WHERE email = ?;",
 				Statement.RETURN_GENERATED_KEYS);
 		ps.setString(1, email);
 		ResultSet rs = ps.executeQuery();
@@ -135,6 +138,7 @@ public class UserDAO {
 		return new User(rs.getInt("id_user"), rs.getString("first_name"), rs.getString("last_name"),
 				rs.getString("email"), rs.getString("city"), rs.getInt("zipCode"), rs.getBoolean("isAdmin"),
 				rs.getString("telNum"), rs.getString("streetAddress"), avatarUrl, rs.getTimestamp("date_created"),
+				rs.getTimestamp("last_login_date"), rs.getString("bulstat"), rs.getString("default_language"),
 				rs.getInt("rating"), od.getOrdersForUser(user), cd.getAllCommentsForUser(user));
 	}
 
@@ -151,7 +155,8 @@ public class UserDAO {
 	public List<User> findAllUsersForAdminList() throws SQLException {
 		Connection c = db.getConn();
 		PreparedStatement ps = c.prepareStatement(
-				"SELECT id_user, first_name, last_name, password, email, city, streetAddress,zipCode, rating, avatar_url,isAdmin,telNum date_created FROM user;",
+				"SELECT id_user, first_name, last_name, password, email, city, streetAddress,zipCode, rating, avatar_url,"
+				+ "isAdmin,telNum date_created, last_login_date, bulstat, default_language FROM user;",
 				Statement.RETURN_GENERATED_KEYS);
 		ResultSet rs = ps.executeQuery();
 		LinkedList<User> users = new LinkedList<>();
@@ -159,17 +164,18 @@ public class UserDAO {
 			users.add(new User(rs.getInt("id_user"), rs.getString("first_name"), rs.getString("last_name"),
 					rs.getString("email"), rs.getString("city"), rs.getInt("zipCode"), rs.getBoolean("isAdmin"),
 					rs.getString("telNum"), rs.getString("streetAddress"), rs.getString("avatar_url"),
-					rs.getDate("date_created"), rs.getInt("rating"), new HashSet<>(), new HashSet<>()));
+					rs.getDate("date_created"),rs.getTimestamp("last_login_date"), rs.getString("bulstat"), rs.getString("default_language"),
+					rs.getInt("rating"), new HashSet<>(), new HashSet<>()));
 		}
 		return users;
 	}
 
 	public boolean updateUser(int userId, String firstName, String lastName, String email, String streetAddress,
-			String city, int zip, String telNumber) throws SQLException {
+			String city, int zip, String telNumber, String bulstat) throws SQLException {
 		Connection c = db.getConn();
 		PreparedStatement ps = c.prepareStatement(
 				"UPDATE user SET first_name = ?,"
-						+ "last_name= ?, email = ?, streetAddress = ?, city = ?, zipCode= ?, telNum = ? WHERE id_user = ?",
+						+ "last_name= ?, email = ?, streetAddress = ?, city = ?, zipCode= ?, telNum = ?, bulstat = ? WHERE id_user = ?",
 				Statement.RETURN_GENERATED_KEYS);
 		ps.setString(1, firstName);
 		ps.setString(2, lastName);
@@ -178,9 +184,21 @@ public class UserDAO {
 		ps.setString(5, city);
 		ps.setInt(6, zip);
 		ps.setString(7, telNumber);
-		ps.setInt(8, userId);
+		ps.setString(8, bulstat);
+		ps.setInt(9, userId);
+		
 		int rs = ps.executeUpdate();
 
+		return rs == 1;
+	}
+	
+	public boolean setLastLoginDateForUser(User user) throws SQLException {
+		Connection c = db.getConn();
+		PreparedStatement ps = c.prepareStatement(
+				"UPDATE user SET last_login_date = NOW()  WHERE id_user = ?",
+				Statement.RETURN_GENERATED_KEYS);
+		ps.setInt(1, user.getId());
+		int rs = ps.executeUpdate();
 		return rs == 1;
 	}
 

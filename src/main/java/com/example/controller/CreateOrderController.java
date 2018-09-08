@@ -29,27 +29,60 @@ public class CreateOrderController {
 	@Autowired
 	OrderDAO od;
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param session
+	 * @param model
+	 * @param attr
+	 * @return
+	 */
 	@RequestMapping(value="showCreateOrderPage", method = RequestMethod.GET)
 	public String createOrderPage(HttpSession session, Model model, RedirectAttributes attr) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		addUserDefaultValuesForOrderForm(session, model);
 		return "userViews/userCreateOrder";
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param session
+	 * @param model
+	 * @param attr
+	 * @return
+	 */
 	@RequestMapping(value="showCreateOrderPageWithErrors", method = RequestMethod.GET)
 	public String createOrderPageAfterErrors(HttpSession session, Model model, RedirectAttributes attr) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		
 		return "userViews/userCreateOrder";
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param session
+	 * @param request
+	 * @param attr
+	 * @return
+	 */
 	@RequestMapping(value="createOrder", method = RequestMethod.POST)
 	public String createOrder(HttpSession session, HttpServletRequest request, RedirectAttributes attr) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		
