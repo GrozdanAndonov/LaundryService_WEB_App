@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.model.dao.UserDAO;
 import com.example.model.pojo.User;
+import com.example.util.LoggedValidator;
 
 @Controller
 @RequestMapping(value = "/register")
@@ -28,7 +29,13 @@ public class RegisterController {
 	 * Returning the sign up page
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public String register(Model viewModel) {	
+	public String register(HttpSession session) {	
+		if(LoggedValidator.checksIfUserIsLogged(session)) {
+			return  "userViews/indexLogged";
+		}
+		if(LoggedValidator.checksIfAdminIsLogged(session)) {
+			return "adminViews/adminIndexPage";
+		}
 		return "notLoggedIn/register";
 	}
 	
@@ -40,6 +47,12 @@ public class RegisterController {
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public String register(Model model, HttpSession session, HttpServletRequest req) throws ParseException {
+		if(LoggedValidator.checksIfUserIsLogged(session)) {
+			return  "userViews/indexLogged";
+		}
+		if(LoggedValidator.checksIfAdminIsLogged(session)) {
+			return "adminViews/adminIndexPage";
+		}
 		String[] inputs = this.addInputsInStringArray(req);
 		try {
 			if(this.checkInputsForErrors(inputs, model)){
@@ -50,7 +63,6 @@ public class RegisterController {
 					ud.insertUser(user);
 					user = ud.getFullUserByEmail(inputs[3]);
 				session.setAttribute("User", user);
-				session.setAttribute("logged", true);
 				/*notificationService.sendNotification(u);*/
 			}
 		} catch (SQLException e) {

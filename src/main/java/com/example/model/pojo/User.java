@@ -14,7 +14,10 @@ public class User {
 	private String streetAddress;
 	private String avatarUrl;
 	private String telNumber;
+	private String bulstatNumber;
+	private String defaultLang;
 	private Date dateCreated;
+	private Date dateLastLogIn;
 	private int rating;
 	private String city;
 	private	int zipCode;
@@ -30,7 +33,7 @@ public class User {
 	}
 	
 	public User(int id, String firstName, String lastName,  String email, String city, int zipCode, boolean isAdmin,String telNumber,
-			String streetAddress, String avatarUrl, Date dateCreated, int rating, Set<Order> orders, Set<Comment> comments) {
+			String streetAddress, String avatarUrl, Date dateCreated, Date dateLastLogIn, String bulstatNumber, String defaultLang, int rating, Set<Order> orders, Set<Comment> comments) {
 		this.setId(id);
 		
 		this.setTelNumber(telNumber);
@@ -45,7 +48,13 @@ public class User {
 		
 		this.setEmail(email);
 		
+		this.setBulstatNumber(bulstatNumber);
+		
 		this.setDateCreated(dateCreated);
+		
+		this.setDateLastLogIn(dateLastLogIn);
+		
+		this.setDefaultLang(defaultLang);
 		
 		this.setRating(rating);
 		
@@ -60,11 +69,11 @@ public class User {
 		this.setAdmin(isAdmin);
 		
 	}
+	
 	/**Constructor used for registration
 	 * @param String, String, String, String ,String
 	 * Date must be set later
 	*/
-	
 	public User(String firstName, String lastName, String password, String email, String city, int rating){
 		this.setFirstName(firstName);
 		this.setLastName(lastName);
@@ -258,5 +267,38 @@ public class User {
 		}else {
 		this.telNumber = telNumber;
 		}
+	}
+
+	public String getBulstatNumber() {
+		return bulstatNumber;
+	}
+
+	public void setBulstatNumber(String bulstatNumber) {
+		if(bulstatNumber == null) {
+			this.bulstatNumber = "";
+		}
+		this.bulstatNumber = bulstatNumber;
+	}
+
+	public Date getDateLastLogIn() {
+		return dateLastLogIn;
+	}
+
+	public void setDateLastLogIn(Date dateLastLogIn) {
+		if(dateLastLogIn == null) {
+			throw new IllegalArgumentException("Date last log in is null in User!");
+		}
+		this.dateLastLogIn = dateLastLogIn;
+	}
+
+	public String getDefaultLang() {
+		return defaultLang;
+	}
+
+	public void setDefaultLang(String defaultLang) {
+		if(defaultLang == null) {
+			this.defaultLang = "";
+		}
+		this.defaultLang = defaultLang;
 	}
 }

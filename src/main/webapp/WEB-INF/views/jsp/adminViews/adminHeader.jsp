@@ -30,9 +30,9 @@
                                             </div>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <h6 class="dropdown-header">Welcome, Admin ${ sessionScope.User.lastName }</h6>
-                                            <a href="/LaundryService/aboutUser" class="dropdown-item">Me</a>
-                                            <a href="/LaundryService/settings" class="dropdown-item">Settings</a>
+                                            <h6 class="dropdown-header">Welcome, Admin</h6>
+                                            <a href="/LaundryService/aboutAdminPage" class="dropdown-item">Me</a>
+                                            <a href="/LaundryService/settingsAdmin" class="dropdown-item">Settings</a>
                                             <a href="/LaundryService/logout" class="dropdown-item">Sign out</a>
                                         </div>
                                     </li>

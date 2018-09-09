@@ -33,6 +33,19 @@
 				<div class="title text-centre">
 					<h2>Basic Elements</h2>
 				</div>
+				<c:if test="${userInfoMsg != null }">
+				<div class="alert alert-warning">
+				    <div class="container-fluid">
+					  <div class="alert-icon">
+						<i class="material-icons">warning</i>
+					  </div>
+					  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true"><i class="material-icons">clear</i></span>
+					  </button>
+				      <b>Warning:</b> <c:out value="${ userInfoMsg }"></c:out> <a href="/LaundryService/settings">GO HERE!</a>
+				    </div>
+				</div>
+				</c:if>
 				<form method="POST" action="/LaundryService/orderCreate/createOrder">
 					<div class="form-row">
 						<div class="form-group col-md-6">

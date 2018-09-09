@@ -14,13 +14,20 @@ public class LoggedValidator {
 	}
 	
 	public static boolean checksIfUserIsLogged(HttpSession session){
-		Object o = session.getAttribute("logged");
-		boolean logged = (o != null && ((boolean) o));
 		User sessionUser = (User) session.getAttribute("User");
-		
-		if(session.isNew() || !logged || sessionUser == null) {
-			return true;
+		if(session.isNew() || sessionUser == null) {
+				return false;
+		}else if(sessionUser != null && sessionUser.getIsAdmin()) {
+			return false;
 		}
+		return true;
+	}
+	
+	public static boolean checksIfAdminIsLogged(HttpSession session) {
+			User sessionUser = (User) session.getAttribute("User");
+			if(sessionUser != null) {
+			return sessionUser.getIsAdmin();
+			}
 		return false;
 	}
 	

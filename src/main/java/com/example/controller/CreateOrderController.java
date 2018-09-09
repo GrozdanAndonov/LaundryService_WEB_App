@@ -29,27 +29,60 @@ public class CreateOrderController {
 	@Autowired
 	OrderDAO od;
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param session
+	 * @param model
+	 * @param attr
+	 * @return
+	 */
 	@RequestMapping(value="showCreateOrderPage", method = RequestMethod.GET)
 	public String createOrderPage(HttpSession session, Model model, RedirectAttributes attr) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		addUserDefaultValuesForOrderForm(session, model);
 		return "userViews/userCreateOrder";
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param session
+	 * @param model
+	 * @param attr
+	 * @return
+	 */
 	@RequestMapping(value="showCreateOrderPageWithErrors", method = RequestMethod.GET)
 	public String createOrderPageAfterErrors(HttpSession session, Model model, RedirectAttributes attr) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		
 		return "userViews/userCreateOrder";
 	}
 	
+	/**
+	 * Secured if not user
+	 * 
+	 * @param session
+	 * @param request
+	 * @param attr
+	 * @return
+	 */
 	@RequestMapping(value="createOrder", method = RequestMethod.POST)
 	public String createOrder(HttpSession session, HttpServletRequest request, RedirectAttributes attr) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
 			return "notLoggedIn/indexNotLogged";
 		}
 		
@@ -65,11 +98,10 @@ public class CreateOrderController {
 		String strAddress = request.getParameter("streetAddress");
 		String email = request.getParameter("email");
 		String note = request.getParameter("text");
-		
-		
+		User user = (User) session.getAttribute("User");
+		if(validateUserInfo(user)) {
 		if(validateInputForOrder(firstName, lastName, telNum, city, strAddress, email, note,isExpress, attr)) {
 			addUserAtributesForFormAfterRedirect(firstName, lastName, telNum, city, strAddress, email, note, false, attr);
-			User user = (User) session.getAttribute("User");
 			try {
 				od.createOrderForUser(user, new Order(user, firstName, lastName, email, city, strAddress, telNum, note, isExpress, false));
 			} catch (SQLException e) {
@@ -80,11 +112,38 @@ public class CreateOrderController {
 			attr.addFlashAttribute("msgSuccess", "Order has been created successfully!");
 			return "redirect:showCreateOrderPageWithErrors";
 		}
+		}else {
+			attr.addFlashAttribute("userInfoMsg", "Please fill all profile data before creating order!");
+		}
 		addUserAtributesForFormAfterRedirect(firstName, lastName, telNum, city, strAddress, email, note, isExpress, attr);
 		return "redirect:showCreateOrderPageWithErrors";
 	}
 	
-	
+	private boolean validateUserInfo(User user) {
+		boolean result = true;
+		if(!user.getFirstName().matches("^\\D{2,}$")) {
+			result = false;
+		}
+		if(!user.getTelNumber().matches("^[0-9]{10}$")) {
+			result = false;
+		}
+		if(!user.getLastName().matches("^\\D{2,}$")) {
+			result = false;
+		}
+		if(!user.getCity().matches("^\\D{2,}$")) {
+			result = false;
+		}
+		if(!user.getEmail().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
+			result = false;
+		}
+		if(!user.getStreetAddress().matches("^[\\w\\s]{2,}$")) {
+			result = false;
+		}
+		if(!user.getBulstatNumber().matches("^[0-9]{9}$")) {
+			result = false;
+		}
+		return result;
+	}
 	
 	public static void addUserAtributesForFormAfterRedirect( String firstName, String lastName, String telNum, String city, 
 			String strAddress, String email, String note, boolean isExpress,  RedirectAttributes attr) {

@@ -17,30 +17,29 @@ public class WelcomeControler {
 
 	@Autowired
 	UserDAO ud;
-	
+
 	@RequestMapping(value = "/*", method = RequestMethod.GET)
-	public String welcome(Model viewModel, HttpSession session) {	
-		if(LoggedValidator.checksIfUserIsLogged(session)) {
-			return "notLoggedIn/indexNotLogged";
-		}else {
-				if(((User) session.getAttribute("User")).getIsAdmin()) {
-					return "adminViews/adminIndexPage";
-				}
+	public String welcome(Model viewModel, HttpSession session) {
+		if (LoggedValidator.checksIfUserIsLogged(session)) {
 			return "userViews/indexLogged";
+		} 
+		if (LoggedValidator.checksIfAdminIsLogged(session)) {
+			return "adminViews/adminIndexPage";
 		}
+		return "notLoggedIn/indexNotLogged";
 	}
-	
+
 	@RequestMapping(value = "/aboutUs", method = RequestMethod.GET)
-	public String aboutUs(Model viewModel, HttpSession session) {	
+	public String aboutUs(Model viewModel, HttpSession session) {
 		return "notLoggedIn/aboutUs";
 	}
-	
+
 	@RequestMapping(value = "/contactUs", method = RequestMethod.GET)
-	public String contactUs(Model viewModel, HttpSession session) {	
-		if(LoggedValidator.checksIfUserIsLogged(session)) {
+	public String contactUs(Model viewModel, HttpSession session) {
+		if (!LoggedValidator.checksIfUserIsLogged(session)) {
 			return "notLoggedIn/indexNotLogged";
 		}
-			return "userViews/contactViewWithAdmin";
+		return "userViews/contactViewWithAdmin";
 	}
-	
+
 }

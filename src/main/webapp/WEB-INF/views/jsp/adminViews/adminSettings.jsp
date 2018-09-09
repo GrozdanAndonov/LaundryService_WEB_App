@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Settings</title>
+<title>Settings ADMIN</title>
 <meta
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
 	name="viewport" />
@@ -13,15 +13,14 @@
 <jsp:include page="../staticContent.jsp"></jsp:include>
 </head>
 <body class="index-page">
-	<jsp:include page="headerLogged.jsp"></jsp:include>
+	<jsp:include page="adminHeader.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
 		style="background-image: url('<c:url value="/img/bg2.jpg"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
-						<h1>Settings</h1>
-						<h3>A Badass Bootstrap 4 UI Kit based on Material Design.</h3>
+						<h1>Settings Admin</h1>
 					</div>
 				</div>
 			</div>
@@ -54,7 +53,7 @@
 				</div>
 			</div>
 			<div class="container">
-				<form method="POST" action="/LaundryService/changeUserData">
+				<form method="POST" action="/LaundryService/changeAdminData">
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label for="inputEmail4">First Name</label> <input type="text"
@@ -77,7 +76,7 @@
 					<div class="form-group col-md-6">
 						<label for="inputAddress">Email</label> <input type="email"
 							class="form-control" id="inputAddress" placeholder="Email..."
-							name="email" value="${email}">
+							name="firstEmail" value="${email}">
 						<p class="text-danger">
 							<strong>${emailError}</strong>
 						</p>
@@ -85,7 +84,7 @@
 					<div class="form-group col-md-6">
 						<label for="inputAddress">Telephone number</label> <input type="text"
 							class="form-control" id="inputAddress" placeholder="Telephone number..."
-							name="telNumber" value="${telNumber}">
+							name="firstTelNumber" value="${telNumber}">
 						<p class="text-danger">
 							<strong>${telNumberError}</strong>
 						</p>
@@ -93,50 +92,30 @@
 					</div>
 					<div class="form-row">
 					<div class="form-group col-md-6">
-						<label for="inputAddress2">Street address</label> <input type="text"
-							class="form-control" id="inputAddress2" placeholder="Street address..."
-							name="streetAddress" value="${streetAddress}">
+						<label for="inputAddress">Second Email</label> <input type="email"
+							class="form-control" id="inputAddress" placeholder="Email..."
+							name="secondEmail" value="${email}">
 						<p class="text-danger">
-							<strong>${streetError}</strong>
+							<strong>${emailError}</strong>
 						</p>
 					</div>
 					<div class="form-group col-md-6">
-						<label for="inputAddress2">Bulstat</label> <input type="text"
-							class="form-control" id="inputAddress2" placeholder="Bulstat..."
-							name="bulstat" value="${bulstat}">
+						<label for="inputAddress">Second Telephone number</label> <input type="text"
+							class="form-control" id="inputAddress" placeholder="Telephone number..."
+							name="secondTelNumber" value="${telNumber}">
 						<p class="text-danger">
-							<strong>${bulstatError}</strong>
+							<strong>${telNumberError}</strong>
 						</p>
 					</div>
 					</div>
-					<div class="form-row">
-						<div class="form-group col-md-6">
-							<label for="inputCity">City</label> <input type="text"
-								class="form-control" id="inputCity" name="city" value="${city}">
-							<p class="text-danger">
-								<strong>${cityError}</strong>
-							</p>
-						</div>
-						<div class="form-group col-md-3">
-							<label for="inputState">Date of creation</label> <input
-								type="text" class="form-control" id="date" disabled
-								value="${dateOfCreation}">
-						</div>
-						<div class="form-group col-md-2 ml-auto">
-							<label for="inputZip">Zip</label> <input type="number"
-								class="form-control" id="inputZip" name="zip" value="${zip}">
-								<p class="text-danger">
-								<strong>${zipError}</strong>
-							</p>
-						</div>
-					</div>
+				
 					<p class="text-danger">
 						<strong>${msgError}</strong>
 					</p>
 					<p class="text-success">
 						<strong>${msgSuccess}</strong>
 					</p>
-					<button type="submit" class="btn btn-primary">Submit</button>
+					<button type="submit" class="btn btn-primary">Change settings</button>
 				</form>
 			</div>
 		</div>
