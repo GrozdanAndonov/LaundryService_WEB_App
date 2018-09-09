@@ -11,6 +11,17 @@
 	name="viewport" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <jsp:include page="../staticContent.jsp"></jsp:include>
+<style>
+.avatar {
+    vertical-align: middle;
+    width: fixed;
+    height: 70px;
+    border-radius: 50%;
+}
+.tr {
+	height:10px;
+}
+</style>
 </head>
 <body class="index-page">
 	<jsp:include page="adminHeader.jsp"></jsp:include>
@@ -31,33 +42,80 @@
 	<div class="main main-raised">
 		<div class="section section-basic">
 			<div class="container">
-				<div class="title">
-					<h1>Admin</h1>
-					<h2>Basic Elements</h2>
+				<c:if test="${msgDeletedUserSuccess != null && msgDeletedUserError == null }">
+						<div class="alert alert-success">
+							    <div class="container-fluid">
+								  <div class="alert-icon">
+									<i class="material-icons">check</i>
+								  </div>
+								  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true"><i class="material-icons">clear</i></span>
+								  </button>
+							      <b>Success:</b> <c:out value="${ msgDeletedUserSuccess }"></c:out>
+							    </div>
+							</div>
+						</c:if>
+						<c:if test="${msgDeletedUserError != null && msgDeletedUserSuccess == null }">
+						<div class="alert alert-danger">
+						    <div class="container-fluid">
+							  <div class="alert-icon">
+							    <i class="material-icons">error_outline</i>
+							  </div>
+							  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true"><i class="material-icons">clear</i></span>
+							  </button>
+						      <b>Error: </b> <c:out value="${ msgDeletedUserError }"></c:out>
+						    </div>
+						</div>
+						</c:if>
+				<c:choose>
+				<c:when test="${users != null &&  !users.isEmpty()}">
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th scope="col">#</th>
-								<th scope="col">First</th>
-								<th scope="col">Last</th>
-								<th scope="col">Handle</th>
+								<th class="text-center">#</th>
+								<th>Name</th>
+								<th>Date creation</th>
+								<th>Number of orders</th>
+								<th>Days from last login</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${ users }" var="user">
+						<c:forEach items="${ users }" var="user">
 								<tr>
 									<th scope="row">
 									<div class="profile-photo-small">
-                                                <img src="/LaundryService/getAvatarsForUsers/adminId=${user.id}" alt="Circle Image" class="rounded-circle img-fluid">
+                                                <img src="/LaundryService/getAvatarsForUsers/adminId=${user.id}" alt="Circle Image" class="rounded-circle img-fluid avatar">
                                             </div></th>
-                                    <td><c:out value="${ user.firstName }"></c:out></td>
-									<td><c:out value="${ user.lastName }"></c:out></td>
-									<td><c:out value="${ user.email }"></c:out></td>
-									<td><c:out value="${ user.city }"></c:out></td>
+                                    <td><c:out value="${ user.firstName }"></c:out> <c:out value="${ user.lastName }"></c:out></td>
+									<td><c:out value="${ user.dateCreated }"></c:out></td>
+									<td><c:out value="${ user.orders.size() }"></c:out></td>
+									<td><c:out value="${ user.daysFromLastLogin }"></c:out></td>
+									<td class="td-actions text-right"><a
+										href="/LaundryService/orderList/orderDetails/${ order.id }"><button
+												type="button" rel="tooltip" title="View Profile"
+												class="btn btn-info btn-simple btn-xs btn-link">
+												<i class="fa fa-user"></i>
+											</button></a>
+											 <a
+												href="/LaundryService/deleteUser/${ user.id }">
+													<button type="button" rel="tooltip" title="Remove"
+														class="btn btn-danger btn-simple btn-xs btn-link">
+														<i class="fa fa-times"></i>
+													</button>
+											</a></td>
 								</tr>
 							</c:forEach>
 						</tbody>
 					</table>
+				</c:when>
+				<c:otherwise>
+					<div class="title text-center">
+						<h3>You have no users.</h3>
+					</div>
+				</c:otherwise>
+				</c:choose>
 				</div>
 			</div>
 		</div>

@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.controller.user;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;

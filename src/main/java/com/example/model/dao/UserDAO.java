@@ -59,13 +59,7 @@ public class UserDAO {
 		return ps.executeUpdate();
 	}
 
-	public void deleteUser(User user) throws SQLException {
-		Connection con = db.getConn();
-		PreparedStatement ps = con.prepareStatement("DELETE FROM user where id_user = ?;",
-				Statement.RETURN_GENERATED_KEYS);
-		ps.setInt(1, user.getId());
-		ps.executeQuery();
-	}
+
 
 	public User getUserById(int id) throws SQLException {
 		Connection c = db.getConn();
@@ -110,9 +104,9 @@ public class UserDAO {
 
 	public boolean checksIfPasswordAndEmailMatchesForUser(String password, String email) throws SQLException {
 		Connection c = db.getConn();
-		PreparedStatement ps = c.prepareStatement("SELECT email, password FROM user WHERE email = ?;",
+		PreparedStatement ps = c.prepareStatement("SELECT email, password FROM user WHERE email LIKE ?;",
 				Statement.RETURN_GENERATED_KEYS);
-		ps.setString(1, email);
+		ps.setString(1, "%"+email+"%");
 		ResultSet rs = ps.executeQuery();
 		if (rs.next()) {
 			if (password.equals(rs.getString("password"))) {
@@ -125,9 +119,9 @@ public class UserDAO {
 	public User getFullUserByEmail(String email) throws SQLException, ParseException {
 		Connection c = db.getConn();
 		PreparedStatement ps = c.prepareStatement(
-				"SELECT id_user, first_name, last_name, password, email, city, streetAddress,zipCode, rating, avatar_url,isAdmin, date_created, telNum, default_language, bulstat, last_login_date  FROM user WHERE email = ?;",
+				"SELECT id_user, first_name, last_name, password, email, city, streetAddress,zipCode, rating, avatar_url,isAdmin, date_created, telNum, default_language, bulstat, last_login_date  FROM user WHERE email LIKE ?;",
 				Statement.RETURN_GENERATED_KEYS);
-		ps.setString(1, email);
+		ps.setString(1, "%"+email+"%");
 		ResultSet rs = ps.executeQuery();
 		rs.next();
 		String avatarUrl = rs.getString("avatar_url");
@@ -144,31 +138,14 @@ public class UserDAO {
 
 	private int getResultForEmail(String email) throws SQLException {
 		Connection c = db.getConn();
-		PreparedStatement ps = c.prepareStatement("SELECT COUNT(email) AS count FROM user where email = ?;",
+		PreparedStatement ps = c.prepareStatement("SELECT COUNT(email) AS count FROM user where email LIKE ?;",
 				Statement.RETURN_GENERATED_KEYS);
-		ps.setString(1, email);
+		ps.setString(1, "%"+email+"%");
 		ResultSet rs = ps.executeQuery();
 		rs.next();
 		return rs.getInt("count");
 	}
 
-	public List<User> findAllUsersForAdminList() throws SQLException {
-		Connection c = db.getConn();
-		PreparedStatement ps = c.prepareStatement(
-				"SELECT id_user, first_name, last_name, password, email, city, streetAddress,zipCode, rating, avatar_url,"
-				+ "isAdmin,telNum date_created, last_login_date, bulstat, default_language FROM user;",
-				Statement.RETURN_GENERATED_KEYS);
-		ResultSet rs = ps.executeQuery();
-		LinkedList<User> users = new LinkedList<>();
-		while (rs.next()) {
-			users.add(new User(rs.getInt("id_user"), rs.getString("first_name"), rs.getString("last_name"),
-					rs.getString("email"), rs.getString("city"), rs.getInt("zipCode"), rs.getBoolean("isAdmin"),
-					rs.getString("telNum"), rs.getString("streetAddress"), rs.getString("avatar_url"),
-					rs.getDate("date_created"),rs.getTimestamp("last_login_date"), rs.getString("bulstat"), rs.getString("default_language"),
-					rs.getInt("rating"), new HashSet<>(), new HashSet<>()));
-		}
-		return users;
-	}
 
 	public boolean updateUser(int userId, String firstName, String lastName, String email, String streetAddress,
 			String city, int zip, String telNumber, String bulstat) throws SQLException {

@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.controller.admin;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,18 +6,12 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.tika.mime.MimeType;
-import org.apache.tika.mime.MimeTypeException;
-import org.apache.tika.mime.MimeTypes;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,110 +19,120 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.WebInitializer;
+import com.example.controller.user.ProfileController;
 import com.example.model.dao.UserDAO;
 import com.example.model.pojo.User;
 import com.example.util.LoggedValidator;
 
-@Component
-@MultipartConfig
 @Controller
-public class ProfileController {
+public class AdminController {
 
+	
 	@Autowired
 	UserDAO ud;
 	
-@RequestMapping(value="uploadPicture", method=RequestMethod.POST)
+	
+	
+	/**
+	 * Secured if not admin
+	 * 
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value="aboutAdminPage", method=RequestMethod.GET)
+	public String showAboutAdminPage(HttpSession session) {
+		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
+			if(!LoggedValidator.checksIfUserIsLogged(session)) {
+				return "notLoggedIn/indexNotLogged";
+			}else {
+				return "userViews/indexLogged";
+			}
+		}
+		return "adminViews/aboutAdminPage";
+	}
+	
+	
+	/**
+	 * Secured if not admin
+	 * 
+	 * @param idUser
+	 * @param response
+	 * @param session
+	 */
+	@RequestMapping(value="getAvatarsForUsers/adminId={userId}", method=RequestMethod.GET)
+	public void getUserAvatarById(@PathVariable("userId") int idUser, HttpServletResponse response, HttpSession session) {
+		if(LoggedValidator.checksIfAdminIsLogged(session)) {
+			User user;
+			String avatarUrl;
+			String defaultUrl = WebInitializer.LOCATION+
+					File.separator+"default-avatar"+File.separator+"default.jpg";
+			try {
+				user = ud.getUserById(idUser);
+				 avatarUrl = user.getAvatarUrl();
+				 if(avatarUrl == null || avatarUrl.isEmpty()) {
+						avatarUrl = defaultUrl;
+					}
+				 File file = new File(avatarUrl);
+				 OutputStream out = response.getOutputStream();
+					Path path = file.toPath();
+				    Files.copy(path, out);
+				    out.flush();
+			} catch (SQLException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@RequestMapping(value="uploadPictureForAdmin", method=RequestMethod.POST)
 	public String uploading(@RequestParam("userAvatar") MultipartFile file, HttpServletRequest req, HttpSession session, Model model){
 			User user = (User) session.getAttribute("User");
 			String filePath = WebInitializer.LOCATION+File.separator + "users" + File.separator + user.getId()+"-"+user.getLastName()+
 					File.separator+"avatar";
 			
-			String extension = this.getExtensionForFile(file);
+			String extension = ProfileController.getExtensionForFile(file);
 			
-			boolean isAllowed = this.checkIfExtensionForFileisAllowed(extension);
+			boolean isAllowed = ProfileController.checkIfExtensionForFileisAllowed(extension);
 			
 			if(!isAllowed) {
 				model.addAttribute("errorFile", "Upload file with the givven extensions!");
-				addAtributesInModel(user, model);
-				return "userViews/settingsUser";
+				ProfileController.addAtributesInModel(user, model);
+				return "adminViews/adminSettings";
 			}
 		
 			File folders = new File(filePath);
 			folders.mkdirs();
 			String fullPathToFile = "";
 			try {
-				fullPathToFile = this.copyFile(user, file, filePath, extension, model);
+				fullPathToFile = ProfileController.copyFile(user, file, filePath, extension, model);
 			} catch (IllegalStateException | IOException e) {
 				model.addAttribute("errorFile", "Sorry, try again later!");
 				e.printStackTrace();
-				addAtributesInModel(user, model);
-				return "userViews/settingsUser";
+				ProfileController.addAtributesInModel(user, model);
+				return "adminViews/adminSettings";
 			}
 			try {
 				ud.insertAvatarUrl(user, fullPathToFile);
 				user.setAvatarUrl(fullPathToFile);
 				session.setAttribute("User", user);
 			} catch (SQLException e) {
-				addAtributesInModel(user, model);
+				ProfileController.addAtributesInModel(user, model);
 				model.addAttribute("errorFile", "Sorry, try again later!");
 				e.printStackTrace();
-				return "userViews/settingsUser";
+				return "adminViews/adminSettings";
 			}
 			
 			model.addAttribute("successFile", "You have successfully uploaded your file.");
-			 addAtributesInModel(user, model);
-			return "userViews/settingsUser";
+			ProfileController.addAtributesInModel(user, model);
+			return "adminViews/adminSettings";
 	
 }
-
-	private String copyFile(User user, MultipartFile file, String filePath, String extension, Model model) throws IllegalStateException, IOException {
-		String fullPathToFile = filePath+File.separator+user.getFirstName()+"-"+user.getLastName()+extension;
-		File f = new File(fullPathToFile);
-			file.transferTo(f);
-			return fullPathToFile;
-	}
-
-	private boolean checkIfExtensionForFileisAllowed(String extension) {
-		boolean isAllowedExtension = false;
-		String[] allowedExt = new String[] {".jpg", ".jpeg", ".png" };
-		
-		for (String ext : allowedExt) {
-			if(ext.equals(extension)) {
-				isAllowedExtension = true;
-			}
-		}
-		
-		return isAllowedExtension;
-	}
 	
-	private String getExtensionForFile(MultipartFile file) {
-		MimeType type = null;
-		try {
-			MimeTypes types = MimeTypes.getDefaultMimeTypes();
-			 type = types.forName(file.getContentType());
-		} catch (MimeTypeException e) {
-			e.printStackTrace();
-		}
-			return type.getExtension();
-	}
-
-	private void addAtributesInModel(User user, Model model) {
-		model.addAttribute("firstName", user.getFirstName());
-		model.addAttribute("lastName",user.getLastName());
-		model.addAttribute("email",user.getEmail());
-		model.addAttribute("streetAddress", user.getStreetAddress());
-		model.addAttribute("city", user.getCity());
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		model.addAttribute("dateOfCreation",dateFormat.format(user.getDateCreated()));
-		model.addAttribute("zip", user.getZipCode());
-	}
-	
-	
-	@RequestMapping(value="getAvatar", method=RequestMethod.GET)
+	@RequestMapping(value="getAvatarForAdmin", method=RequestMethod.GET)
 	public void getUserAvatar(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
-		if(LoggedValidator.checksIfUserIsLogged(session)){
+		if(LoggedValidator.checksIfAdminIsLogged(session)){
 			User user = (User) session.getAttribute("User");
 			String defaultUrl = WebInitializer.LOCATION+
 					File.separator+"default-avatar"+File.separator+"default.jpg";
@@ -151,10 +155,4 @@ public class ProfileController {
 		}
 	}
 	
-	
-	
-
-	
 }
-
-

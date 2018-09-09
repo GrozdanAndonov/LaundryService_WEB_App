@@ -32,7 +32,7 @@
 			<div class="container">
 				<div class="title text-center">
 					<h2>Basic Elements</h2>
-					<form action="uploadPicture" method="post"
+					<form action="uploadPictureForAdmin" method="post"
 						enctype="multipart/form-data">
 						<div class="login-form">
 							<div class="control-group">
@@ -76,17 +76,17 @@
 					<div class="form-group col-md-6">
 						<label for="inputAddress">Email</label> <input type="email"
 							class="form-control" id="inputAddress" placeholder="Email..."
-							name="firstEmail" value="${email}">
+							name="firstEmail" value="${firstEmail}">
 						<p class="text-danger">
-							<strong>${emailError}</strong>
+							<strong>${firstEmailError}</strong>
 						</p>
 					</div>
 					<div class="form-group col-md-6">
 						<label for="inputAddress">Telephone number</label> <input type="text"
 							class="form-control" id="inputAddress" placeholder="Telephone number..."
-							name="firstTelNumber" value="${telNumber}">
+							name="firstTelNumber" value="${firstTelNumber}">
 						<p class="text-danger">
-							<strong>${telNumberError}</strong>
+							<strong>${firstTelNumberError}</strong>
 						</p>
 					</div>
 					</div>
@@ -94,17 +94,17 @@
 					<div class="form-group col-md-6">
 						<label for="inputAddress">Second Email</label> <input type="email"
 							class="form-control" id="inputAddress" placeholder="Email..."
-							name="secondEmail" value="${email}">
+							name="secondEmail" value="${secondEmail}">
 						<p class="text-danger">
-							<strong>${emailError}</strong>
+							<strong>${secondEmailError}</strong>
 						</p>
 					</div>
 					<div class="form-group col-md-6">
 						<label for="inputAddress">Second Telephone number</label> <input type="text"
 							class="form-control" id="inputAddress" placeholder="Telephone number..."
-							name="secondTelNumber" value="${telNumber}">
+							name="secondTelNumber" value="${secondTelNumber}">
 						<p class="text-danger">
-							<strong>${telNumberError}</strong>
+							<strong>${secondTelNumberError}</strong>
 						</p>
 					</div>
 					</div>

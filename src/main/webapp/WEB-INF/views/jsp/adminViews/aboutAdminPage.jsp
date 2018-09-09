@@ -20,7 +20,7 @@
                     <div class="col-md-6 ml-auto mr-auto">
                         <div class="profile">
                             <div class="avatar">
-                                <img src="/LaundryService/getAvatar" alt="Circle Image" class="img-raised rounded-circle img-fluid">
+                                <img src="/LaundryService/getAvatarForAdmin" alt="Circle Image" class="img-raised rounded-circle img-fluid">
                             </div>
                             <div class="name">
                                 <h3 class="title">${ sessionScope.User.firstName } ${ sessionScope.User.lastName }</h3>
