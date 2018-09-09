@@ -1,8 +1,10 @@
 package com.example.controller.admin;
 
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpSession;
@@ -10,8 +12,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.model.dao.AdminDAO;
 import com.example.model.dao.UserDAO;
@@ -34,7 +38,7 @@ public class AdminListUsersController {
 	 * @param session
 	 * @return
 	 */
-	@RequestMapping(value = "/showUsers", method = RequestMethod.GET)
+	@RequestMapping(value = "showUsers", method = RequestMethod.GET)
 	public String aboutUs(Model model, HttpSession session) {	
 		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
 			if(!LoggedValidator.checksIfUserIsLogged(session)) {
@@ -49,7 +53,21 @@ public class AdminListUsersController {
 			for(User user : users) {
 				user.setDaysFromLastLogin(getDateDiff(user.getDateLastLogIn(),TimeUnit.DAYS));
 			}
-			model.addAttribute("users", users);
+			TreeSet<User> usersOrdered = new TreeSet<>(new Comparator<User>() {
+				@Override
+				public int compare(User o1, User o2) {
+					int result = (int) (o1.getDaysFromLastLogin()-o2.getDaysFromLastLogin());
+					 if(result ==0) {
+						  result = o1.getOrders().size()-o2.getOrders().size();
+						 if(result == 0) {
+							 result = -1;
+						 }
+					 }
+					 return result;
+				}
+			});
+			usersOrdered.addAll(users);
+			model.addAttribute("users", usersOrdered);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -61,4 +79,25 @@ public class AdminListUsersController {
 	    long diffInMillies = new Date().getTime() - lastLoginDate.getTime();
 	    return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
 	}
+	
+	@RequestMapping(value = "deleteUser/{userId}", method = RequestMethod.GET)
+	public String deleteUser(@PathVariable int userId, HttpSession session, RedirectAttributes attr) {
+		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
+			if(!LoggedValidator.checksIfUserIsLogged(session)) {
+				return "notLoggedIn/indexNotLogged";
+			}else {
+				return "userViews/indexLogged";
+			}
+		}
+		try {
+			ad.deleteUser(new User(userId));
+			attr.addFlashAttribute("msgDeletedUserSuccess", "User has been deleted successfully!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			attr.addFlashAttribute("msgDeletedUserError", "Something went wrong! Please try again later!");
+		}
+		return "redirect:/showUsers";
+		
+	}
+	
 }

@@ -50,7 +50,7 @@ public class AdminDAO {
 		PreparedStatement ps = con.prepareStatement("DELETE FROM user where id_user = ?;",
 				Statement.RETURN_GENERATED_KEYS);
 		ps.setInt(1, user.getId());
-		ps.executeQuery();
+		ps.executeUpdate();
 	}
 	
 	public boolean updateAdminSettings(User user , String firstName, String lastName, String email, String telNum) throws SQLException {

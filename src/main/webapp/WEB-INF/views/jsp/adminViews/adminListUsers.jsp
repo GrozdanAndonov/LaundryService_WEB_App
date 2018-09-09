@@ -42,6 +42,32 @@
 	<div class="main main-raised">
 		<div class="section section-basic">
 			<div class="container">
+				<c:if test="${msgDeletedUserSuccess != null && msgDeletedUserError == null }">
+						<div class="alert alert-success">
+							    <div class="container-fluid">
+								  <div class="alert-icon">
+									<i class="material-icons">check</i>
+								  </div>
+								  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true"><i class="material-icons">clear</i></span>
+								  </button>
+							      <b>Success:</b> <c:out value="${ msgDeletedUserSuccess }"></c:out>
+							    </div>
+							</div>
+						</c:if>
+						<c:if test="${msgDeletedUserError != null && msgDeletedUserSuccess == null }">
+						<div class="alert alert-danger">
+						    <div class="container-fluid">
+							  <div class="alert-icon">
+							    <i class="material-icons">error_outline</i>
+							  </div>
+							  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true"><i class="material-icons">clear</i></span>
+							  </button>
+						      <b>Error: </b> <c:out value="${ msgDeletedUserError }"></c:out>
+						    </div>
+						</div>
+						</c:if>
 				<c:choose>
 				<c:when test="${users != null &&  !users.isEmpty()}">
 					<table class="table table-striped">
@@ -73,7 +99,7 @@
 												<i class="fa fa-user"></i>
 											</button></a>
 											 <a
-												href="/LaundryService/orderList/deleteUncheckedOrder/${ order.id }">
+												href="/LaundryService/deleteUser/${ user.id }">
 													<button type="button" rel="tooltip" title="Remove"
 														class="btn btn-danger btn-simple btn-xs btn-link">
 														<i class="fa fa-times"></i>
