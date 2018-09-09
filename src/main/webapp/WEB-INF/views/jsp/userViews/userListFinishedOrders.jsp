@@ -56,7 +56,6 @@
 						</div>
 					</form>
 				</div>
-			<c:if test="${showContent != null}">	
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="title text-center">
 						<h2>Orders list</h2>
@@ -103,7 +102,6 @@
 					</div>
 				</c:otherwise>
 				</c:choose>
-				</c:if>
 			</div>
 		</div>
 	</div>

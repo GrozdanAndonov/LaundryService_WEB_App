@@ -24,9 +24,15 @@ public class User {
 	private boolean isAdmin;
 	private Set<Order> orders;
 	private Set<Comment> comments;
+	private long daysFromLastLogin = -1;
 	
-	
-	
+	/**
+	 * Constructor for getting orders for admin
+	 * @param id
+	 */
+	public User(int id) {
+		this.id = id;
+	}
 	
 	public User() {
 		// used in order constructor
@@ -300,5 +306,13 @@ public class User {
 			this.defaultLang = "";
 		}
 		this.defaultLang = defaultLang;
+	}
+
+	public long getDaysFromLastLogin() {
+		return daysFromLastLogin;
+	}
+
+	public void setDaysFromLastLogin(long daysFromLastLogin) {
+		this.daysFromLastLogin = daysFromLastLogin;
 	}
 }

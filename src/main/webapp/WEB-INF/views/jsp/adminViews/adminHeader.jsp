@@ -26,7 +26,7 @@
                        <li class="dropdown nav-item">
                                         <a href="#pablo" class="profile-photo dropdown-toggle nav-link" data-toggle="dropdown">
                                             <div class="profile-photo-small">
-                                                <img src="/LaundryService/getAvatar" alt="Circle Image" class="rounded-circle img-fluid">
+                                                <img src="/LaundryService/getAvatarForAdmin" alt="Circle Image" class="rounded-circle img-fluid">
                                             </div>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right">
