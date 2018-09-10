@@ -62,7 +62,7 @@ public class AdminController {
 	 * @param response
 	 * @param session
 	 */
-	@RequestMapping(value="getAvatarsForUsers/adminId={userId}", method=RequestMethod.GET)
+	@RequestMapping(value="getAvatarsForUsers/userId={userId}", method=RequestMethod.GET)
 	public void getUserAvatarById(@PathVariable("userId") int idUser, HttpServletResponse response, HttpSession session) {
 		if(LoggedValidator.checksIfAdminIsLogged(session)) {
 			User user;

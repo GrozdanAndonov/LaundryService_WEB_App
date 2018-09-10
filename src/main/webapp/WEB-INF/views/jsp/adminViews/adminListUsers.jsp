@@ -86,14 +86,14 @@
 								<tr>
 									<th scope="row">
 									<div class="profile-photo-small">
-                                                <img src="/LaundryService/getAvatarsForUsers/adminId=${user.id}" alt="Circle Image" class="rounded-circle img-fluid avatar">
+                                                <img src="/LaundryService/getAvatarsForUsers/userId=${user.id}" alt="Circle Image" class="rounded-circle img-fluid avatar">
                                             </div></th>
                                     <td><c:out value="${ user.firstName }"></c:out> <c:out value="${ user.lastName }"></c:out></td>
 									<td><c:out value="${ user.dateCreated }"></c:out></td>
 									<td><c:out value="${ user.orders.size() }"></c:out></td>
 									<td><c:out value="${ user.daysFromLastLogin }"></c:out></td>
 									<td class="td-actions text-right"><a
-										href="/LaundryService/orderList/orderDetails/${ order.id }"><button
+										href="/LaundryService/userDetails/${ user.id }"><button
 												type="button" rel="tooltip" title="View Profile"
 												class="btn btn-info btn-simple btn-xs btn-link">
 												<i class="fa fa-user"></i>
@@ -119,7 +119,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
 
 
 

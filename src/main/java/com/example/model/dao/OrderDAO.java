@@ -44,7 +44,7 @@ public class OrderDAO {
 	
 	public Set<Order> getOrdersForUser(User user) throws SQLException{
 		Connection con = db.getConn();
-		PreparedStatement ps = con.prepareStatement("SELECT id_order, date_creation, date_finished, email, city,"
+		PreparedStatement ps = con.prepareStatement("SELECT id_order, date_creation, date_finished, first_name, last_name, email, city,"
 				+ "streetAddress, telNum, cost, note, discount, type_of_order FROM orders WHERE id_user = ?", Statement.RETURN_GENERATED_KEYS);
 		ps.setInt(1, user.getId());
 		ps.executeQuery();
@@ -53,11 +53,20 @@ public class OrderDAO {
 		while(rs.next()){
 			orders.add(new Order(
 						rs.getInt("id_order"),
-						rs.getDate("date_creation"),
-						rs.getDate("date_finished"),
+						rs.getTimestamp("date_creation"),
+						rs.getTimestamp("date_finished"),
 						rs.getDouble("cost"),
+						rs.getString("first_name"),
+						rs.getString("last_name"),
 						dd.getDiscountsForOrder(new Order(rs.getInt("id_order"))),
-						user));
+						rs.getString("email"),
+						rs.getString("city"),
+						rs.getString("streetAddress"),
+						rs.getString("telNum"),
+						rs.getString("note"),
+						rs.getBoolean("type_of_order"),
+						rs.getDouble("discount")
+						));
 		}
 		
 		return orders;

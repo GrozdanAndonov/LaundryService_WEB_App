@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Index</title>
+<title>Index-Admin</title>
 <meta
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
 	name="viewport" />
@@ -13,14 +13,14 @@
 <jsp:include page="../staticContent.jsp"></jsp:include>
 </head>
 <body class="index-page">
-	<jsp:include page="headerLogged.jsp"></jsp:include>
+	<jsp:include page="adminHeader.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
 		style="background-image: url('<c:url value="/img/bg2.jpg"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
-						<h1>View orders</h1>
+						<h1>Unchecked orders</h1>
 					</div>
 				</div>
 			</div>
@@ -30,12 +30,10 @@
 	<div class="main main-raised">
 		<div class="section section-basic">
 			<div class="container">
-				<div class="title text-center">
-					<h2>Search orders</h2>
-				</div>
+				
 				<div class="section">
 					<form method="POST"
-						action="/LaundryService/orderList/searchOrdersBetweenDates">
+						action="/LaundryService/searchUncheckedOrdersBetweenDatesForUser">
 						<div class="form-row">
 							<div class="form-group col-md-4">
 								<label class="label-control">From date</label> <input
@@ -56,10 +54,11 @@
 						</div>
 					</form>
 				</div>
+				
 				<c:if test="${showContent != null}">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="title text-center">
-						<h2>Orders list</h2>
+						<h2>Unchecked Orders list</h2>
 					</div>
 				</div>
 				
@@ -99,29 +98,36 @@
 				</c:when>
 				<c:otherwise>
 					<div class="title text-center">
-						<h3>You have no finished orders.</h3>
+						<h3>You have no unchecked orders.</h3>
 					</div>
 				</c:otherwise>
 				</c:choose>
 				</c:if>
+				<a href="/LaundryService/userDetails/${ sessionScope.userDetails.id }">
+				<button type="button" class="btn btn-primary">Back</button> 
+				</a>
 			</div>
 		</div>
 	</div>
+
+
+
+
 	<jsp:include page="../footer.jsp"></jsp:include>
 </body>
-<script>
-	$('.datetimepicker').datetimepicker({
-		icons : {
-			time : "fa fa-clock-o",
-			date : "fa fa-calendar",
-			up : "fa fa-chevron-up",
-			down : "fa fa-chevron-down",
-			previous : 'fa fa-chevron-left',
-			next : 'fa fa-chevron-right',
-			today : 'fa fa-screenshot',
-			clear : 'fa fa-trash',
-			close : 'fa fa-remove'
-		}
-	});
-</script>
+	<script>
+				$('.datetimepicker').datetimepicker({
+				    icons: {
+				        time: "fa fa-clock-o",
+				        date: "fa fa-calendar",
+				        up: "fa fa-chevron-up",
+				        down: "fa fa-chevron-down",
+				        previous: 'fa fa-chevron-left',
+				        next: 'fa fa-chevron-right',
+				        today: 'fa fa-screenshot',
+				        clear: 'fa fa-trash',
+				        close: 'fa fa-remove'
+				    }
+				});
+				</script>
 </html>
