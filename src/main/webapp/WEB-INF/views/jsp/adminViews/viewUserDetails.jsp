@@ -85,17 +85,17 @@
 			<div class ="container">
 			<div class="form-row ">
 					<div class="form-group col-md-4 text-center">
-						<a href="/LaundryService/viewUncheckedOrdersForUser/${ user.id }">
+						<a href="/LaundryService/viewUncheckedOrdersForUser">
 						<button type="button" class="btn btn-primary">View unchecked orders</button>
 						</a>
 					</div>
 					<div class="form-group col-md-4 text-center">
-					<a href="/LaundryService/viewCheckedOrdersForUser/${ user.id }">
+					<a href="/LaundryService/viewCheckedOrdersForUserDetails">
 						<button type="button" class="btn btn-primary">View checked orders</button>
 						</a>
 					</div>
 					<div class="form-group col-md-4 text-center">
-					<a href="/LaundryService/viewFinishedOrdersForUser/${ user.id }">
+					<a href="/LaundryService/viewFinishedOrdersForUser">
 						<button type="button" class="btn btn-primary">View finished orders</button>
 						</a>
 						

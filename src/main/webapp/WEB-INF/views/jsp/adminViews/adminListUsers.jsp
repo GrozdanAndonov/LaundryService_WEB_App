@@ -32,7 +32,6 @@
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
 						<h1>Users</h1>
-						<h3>A Badass Bootstrap 4 UI Kit based on Material Design.</h3>
 					</div>
 				</div>
 			</div>

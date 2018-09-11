@@ -67,7 +67,7 @@ public class Order {
 	public Order(int id, Date dateCreated, Date dateFinished, double cost, String firstName,
 			String lastName, Set<Discount> discounts,
 			String email, String city, String streetAddress, String telNumber, String note,
-			boolean isExpress, double totalDiscount) {
+			boolean isExpress,boolean isAccepted, double totalDiscount) {
 		this(id, dateCreated, dateFinished, cost, firstName, lastName, discounts,new User());
 		this.setEmail(email);
 		this.setCity(city);
@@ -76,6 +76,7 @@ public class Order {
 		this.setNote(note);
 		this.setIsExpress(isExpress);
 		this.setTotalDiscount(totalDiscount);
+		this.setAccepted(isAccepted);
 		try {
 			this.setDateCreatedForView(DateFormatConverter.convertFromDBToListingOrders(dateCreated));
 			if(dateFinished == null) {

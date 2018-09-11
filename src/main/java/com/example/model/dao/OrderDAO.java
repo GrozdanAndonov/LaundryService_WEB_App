@@ -45,7 +45,7 @@ public class OrderDAO {
 	public Set<Order> getOrdersForUser(User user) throws SQLException{
 		Connection con = db.getConn();
 		PreparedStatement ps = con.prepareStatement("SELECT id_order, date_creation, date_finished, first_name, last_name, email, city,"
-				+ "streetAddress, telNum, cost, note, discount, type_of_order FROM orders WHERE id_user = ?", Statement.RETURN_GENERATED_KEYS);
+				+ "streetAddress, telNum, cost, note, discount, type_of_order, is_accepted FROM orders WHERE id_user = ?", Statement.RETURN_GENERATED_KEYS);
 		ps.setInt(1, user.getId());
 		ps.executeQuery();
 		ResultSet rs = ps.getResultSet();
@@ -65,6 +65,7 @@ public class OrderDAO {
 						rs.getString("telNum"),
 						rs.getString("note"),
 						rs.getBoolean("type_of_order"),
+						rs.getBoolean("is_accepted"),
 						rs.getDouble("discount")
 						));
 		}
@@ -75,7 +76,7 @@ public class OrderDAO {
 	public Order findOrderByIdForUser(User user, Order order) throws SQLException {
 		Connection con = db.getConn();
 		PreparedStatement ps = con.prepareStatement("SELECT id_order,first_name, last_name, date_creation, date_finished, email, city,"
-				+ "streetAddress, telNum, cost, note, discount, type_of_order FROM orders WHERE id_order= ? AND id_user= ?;", Statement.RETURN_GENERATED_KEYS);
+				+ "streetAddress, telNum, cost, note, discount, type_of_order, is_accepted FROM orders WHERE id_order= ? AND id_user= ?;", Statement.RETURN_GENERATED_KEYS);
 		ps.setInt(1, order.getId());
 		ps.setInt(2, user.getId());
 		ps.executeQuery();
@@ -96,6 +97,7 @@ public class OrderDAO {
 				rs.getString("telNum"),
 				rs.getString("note"),
 				rs.getBoolean("type_of_order"),
+				rs.getBoolean("is_accepted"),
 				rs.getDouble("discount")
 				);
 	}

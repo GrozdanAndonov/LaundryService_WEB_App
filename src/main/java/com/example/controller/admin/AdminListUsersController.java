@@ -116,6 +116,8 @@ public class AdminListUsersController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		session.setAttribute("userDetails", user);
 		model.addAttribute("user", user);
 		return "adminViews/viewUserDetails";
 	}

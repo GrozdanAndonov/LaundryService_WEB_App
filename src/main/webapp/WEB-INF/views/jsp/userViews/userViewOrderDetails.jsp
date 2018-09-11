@@ -37,39 +37,39 @@
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label for="inputEmail4">First Name</label> 
-							<input disabled type="text" class="form-control" id="inputEmail4" value="${order.firstName}">
+							<input readonly type="text" class="form-control" id="inputEmail4" value="${order.firstName}">
 						</div>
 						<div class="form-group col-md-6">
-							<label for="inputPassword4">Last Name</label> <input  disabled type="text" class="form-control" id="inputPassword4" value="${order.lastName}">
+							<label for="inputPassword4">Last Name</label> <input  readonly type="text" class="form-control" id="inputPassword4" value="${order.lastName}">
 						</div>
 					</div>
 					<div class="form-row">
 					<div class="form-group col-md-6">
-						<label for="inputAddress">Email</label> <input disabled type="email" class="form-control" id="inputAddress"  value="${order.email}">
+						<label for="inputAddress">Email</label> <input readonly type="email" class="form-control" id="inputAddress"  value="${order.email}">
 					</div>
 					<div class="form-group col-md-6">
-						<label for="inputAddress2">Street address</label> <input disabled type="text" class="form-control" id="inputAddress2" value="${order.streetAddress}">
+						<label for="inputAddress2">Street address</label> <input readonly type="text" class="form-control" id="inputAddress2" value="${order.streetAddress}">
 					</div>
 					</div>
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label for="inputCity">City</label> 
-							<input type="text" class="form-control" id="inputCity" value="${order.city}"  disabled>
+							<input type="text" class="form-control" id="inputCity" value="${order.city}"  readonly>
 						</div>
 						<div class="form-group col-md-6">
 							<label for="inputZip">Telephone number</label> 
-							<input type="text" class="form-control" id="inputZip"  value="${order.telNumber}" disabled>
+							<input type="text" class="form-control" id="inputZip"  value="${order.telNumber}" readonly>
 						</div>
 					</div>
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label for="inputCity">Date of creation</label> 
-							<input type="text" class="form-control" id="inputCity" value="${order.dateCreatedForView}"  disabled>
+							<input type="text" class="form-control" id="inputCity" value="${order.dateCreatedForView}"  readonly>
 						</div>
 						<c:if test="${!order.dateFinishedForView.isEmpty()}">
 						<div class="form-group col-md-6">
 							<label for="inputZip">Date of finished</label> 
-							<input type="text" class="form-control" id="inputZip"  value="${order.dateFinishedForView}" disabled>
+							<input type="text" class="form-control" id="inputZip"  value="${order.dateFinishedForView}" readonly>
 						</div>
 						</c:if>
 					</div>
@@ -77,13 +77,13 @@
 					  <c:if test="${order.cost!=0}">
 					<div class="form-group col-md-6">
 							<label for="inputCity">Total cost</label> 
-							<input type="text" class="form-control" id="inputCity" value="${order.cost}lv"  disabled>
+							<input type="text" class="form-control" id="inputCity" value="${order.cost}lv"  readonly>
 						</div>
 						</c:if>
 						  <c:if test="${order.totalDiscount!=0}">
 						<div class="form-group col-md-6">
 							<label for="inputZip">Total discount</label> 
-							<input type="text" class="form-control" id="inputZip"  value="${order.totalDiscount}lv" disabled>
+							<input type="text" class="form-control" id="inputZip"  value="${order.totalDiscount}lv" readonly>
 						</div>
 						</c:if>
 					</div>
@@ -92,7 +92,7 @@
 					<div class="form-row">
 						<div class="form-group col-md-12">
 				    <label>Enter note for order</label>
-				    <textarea type="text" class="form-control" id="exampleFormControlTextarea1" rows="6"  disabled>${order.note}</textarea>
+				    <textarea type="text" class="form-control" id="exampleFormControlTextarea1" rows="6"  readonly>${order.note}</textarea>
 				  </div>
 				  </div>
 				  </c:if>

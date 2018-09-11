@@ -27,4 +27,9 @@ public class DateFormatConverter {
 		return date24Format.format(date12Format.parse(date));
 	}
 	
+	public static Date convertFromCalendarViewToDate(String date) throws ParseException {
+		SimpleDateFormat format  = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+		SimpleDateFormat date24Format  = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		return 	date24Format.parse(date24Format.format(format.parse(date)));
+	}
 }
