@@ -13,9 +13,14 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
+                <li class = "nav-item">
+                        <a href="/LaundryService/viewExpressOrders" class="nav-link">
+                           EXPRESS ORDERS
+                        </a>
+                    </li>
                     <li class = "nav-item">
-                        <a href="/LaundryService/viewOrders" class="nav-link">
-                            VIEW ORDERS
+                        <a href="/LaundryService/viewNormalOrders" class="nav-link">
+                            ORDERS
                         </a>
                     </li>
                     <li class = "nav-item">

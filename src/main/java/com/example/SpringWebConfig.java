@@ -64,7 +64,7 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 	
 	@Bean(name = "multipartResolver")
 	public StandardServletMultipartResolver resolver() {
-	return new StandardServletMultipartResolver();
+		return new StandardServletMultipartResolver();
 	}
 	
 }
