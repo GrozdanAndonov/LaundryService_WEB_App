@@ -22,10 +22,9 @@ import com.example.model.pojo.User;
 import com.example.util.DateFormatConverter;
 import com.example.util.LoggedValidator;
 
-
 @Controller
-public class AdminNormalOrderController {
-	
+public class AdminExpressOrderController {
+
 	@Autowired
 	OrderDAO od;
 	
@@ -34,8 +33,8 @@ public class AdminNormalOrderController {
 	
 	private static String first_date_finished_orders_searching;
 	private static String second_date_finished_orders_searching;
-
-	@RequestMapping(value="viewNormalOrders", method= RequestMethod.GET)
+	
+	@RequestMapping(value="viewExpressOrders", method= RequestMethod.GET)
 	public String showOrderPage(HttpSession session) {
 		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
 			if(!LoggedValidator.checksIfUserIsLogged(session)) {
@@ -45,11 +44,10 @@ public class AdminNormalOrderController {
 			}
 		}
 		
-		return "adminViews/normalOrders/viewNormalOrders";
+		return "adminViews/expressOrders/viewExpressOrders";
 	}
 	
-	
-	@RequestMapping(value="viewUncheckedNormalOrders", method= RequestMethod.GET)
+	@RequestMapping(value="viewUncheckedExpressOrders", method= RequestMethod.GET)
 	public String showUncheckedOrderPage(HttpSession session, Model model) {
 		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
 			if(!LoggedValidator.checksIfUserIsLogged(session)) {
@@ -60,16 +58,15 @@ public class AdminNormalOrderController {
 		}
 		List<Order> orders = null;
 		try {
-		orders = od.findAllUncheckedUnexpress();
+		orders = od.findAllUncheckedExpress();
 		} catch (SQLException e) {
 			e.printStackTrace(); //TODO
 		}
 		model.addAttribute("orders",orders);
-		return "adminViews/normalOrders/viewUncheckedOrders";
+		return "adminViews/expressOrders/viewUncheckedOrders";
 	}
 	
-	
-	@RequestMapping(value="uncheckedOrderDetails/{orderId}", method= RequestMethod.GET)
+	@RequestMapping(value="uncheckedExpressOrderDetails/{orderId}", method= RequestMethod.GET)
 	public String showUncheckedOrderDetailsPage(@PathVariable int orderId, HttpSession session, Model model) {
 		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
 			if(!LoggedValidator.checksIfUserIsLogged(session)) {
@@ -80,15 +77,15 @@ public class AdminNormalOrderController {
 		}
 		Order order = null;
 		try {
-		order = od.findUncheckedUnExpressOrderById(orderId);
+		order = od.findUncheckedExpressOrderById(orderId);
 		} catch (SQLException e) {
 			e.printStackTrace(); //TODO
 		}
 		model.addAttribute("order",order);
-		return "adminViews/normalOrders/uncheckedOrderDetails";
+		return "adminViews/expressOrders/uncheckedExpressOrderDetails";
 	}
 	
-	@RequestMapping(value="checkOrder/{orderId}", method= RequestMethod.GET)
+	@RequestMapping(value="checkExpressOrder/{orderId}", method= RequestMethod.GET)
 	public String checkOrder(@PathVariable int orderId, HttpSession session, Model model) {
 		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
 			if(!LoggedValidator.checksIfUserIsLogged(session)) {
@@ -102,10 +99,10 @@ public class AdminNormalOrderController {
 		} catch (SQLException e) {
 			e.printStackTrace(); //TODO
 		}
-		return "redirect:/viewUncheckedNormalOrders";
+		return "redirect:/viewUncheckedExpressOrders";
 	}
 	
-	@RequestMapping(value="viewCheckedNormalOrders", method= RequestMethod.GET)
+	@RequestMapping(value="viewCheckedExpressOrders", method= RequestMethod.GET)
 	public String listCheckedOrders(HttpSession session, Model model) {
 		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
 			if(!LoggedValidator.checksIfUserIsLogged(session)) {
@@ -116,16 +113,15 @@ public class AdminNormalOrderController {
 		}
 		List<Order> orders = null;
 		try {
-		orders = od.findAllCheckedUnExpressOrders();
+		orders = od.findAllCheckedExpressOrders();
 		} catch (SQLException e) {
 			e.printStackTrace(); //TODO
 		}
 		model.addAttribute("orders",orders);
-		return "adminViews/normalOrders/viewCheckedOrders";
+		return "adminViews/expressOrders/viewCheckedOrders";
 	}
 	
-	
-	@RequestMapping(value="checkedOrderDetails/{orderId}", method= RequestMethod.GET)
+	@RequestMapping(value="checkedExpressOrderDetails/{orderId}", method= RequestMethod.GET)
 	public String showCheckedOrderDetailsPage(@PathVariable int orderId, HttpSession session, Model model) {
 		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
 			if(!LoggedValidator.checksIfUserIsLogged(session)) {
@@ -136,15 +132,16 @@ public class AdminNormalOrderController {
 		}
 		Order order = null;
 		try {
-		order = od.findCheckedUnExpressOrderById(orderId);
+		order = od.findCheckedExpressOrderById(orderId);
 		} catch (SQLException e) {
 			e.printStackTrace(); //TODO
 		}
 		model.addAttribute("order",order);
-		return "adminViews/normalOrders/checkedOrderDetails";
+		return "adminViews/expressOrders/checkedOrderDetails";
 	}
 	
-	@RequestMapping(value="finishOrder/{orderId}", method= RequestMethod.POST)
+	
+	@RequestMapping(value="finishExpressOrder/{orderId}", method= RequestMethod.POST)
 	public String finishOrder(@PathVariable int orderId, HttpSession session, Model model,
 			HttpServletRequest request, RedirectAttributes attr) {
 		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
@@ -157,60 +154,25 @@ public class AdminNormalOrderController {
 		String price = request.getParameter("cost");
 		String discount = request.getParameter("discount");
 		
-		if(validateInputForFinishingForm(attr, price, discount)) {
+		if(AdminNormalOrderController.validateInputForFinishingForm(attr, price, discount)) {
 			try {
 				od.setUnfinishedOrderToFinished(orderId, Double.parseDouble(price), Double.parseDouble(discount));
 			} catch (NumberFormatException e) {
 				attr.addFlashAttribute("msgError", "Something went wrong! Please try again later!");
 				e.printStackTrace(); 
-				return "redirect:/checkedOrderDetails/"+orderId;
+				return "redirect:/checkedExpressOrderDetails/"+orderId;
 			} catch (SQLException e) {
 				attr.addFlashAttribute("msgError", "Something went wrong! Please try again later!");
 				e.printStackTrace(); 
-				return "redirect:/checkedOrderDetails/"+orderId;
+				return "redirect:/checkedExpressOrderDetails/"+orderId;
 			}
-			return "redirect:/viewCheckedNormalOrders";
+			return "redirect:/viewCheckedExpressOrders";
 		}
 		
-		return "redirect:/checkedOrderDetails/"+orderId;
+		return "redirect:/checkedExpressOrderDetails/"+orderId;
 	}
 	
-	public static boolean validateInputForFinishingForm(RedirectAttributes attr, String cost, String discount) {
-		boolean result = true;
-		if(!cost.isEmpty()) {
-			try {
-				if(Double.parseDouble(cost) < 0) {
-					result = addFlashAttribute(attr, cost, "cost");
-				}
-			}catch(NumberFormatException e) {
-				result = addFlashAttribute(attr, cost, "cost");
-			}
-		}else {
-			result = addFlashAttribute(attr, cost, "cost");
-		}
-			
-		if(!discount.isEmpty()) {
-			try {
-				if(Double.parseDouble(discount) < 0) {
-					result = addFlashAttribute(attr, discount, "discount");
-				}
-			}catch(NumberFormatException e) {
-				result = addFlashAttribute(attr, discount, "discount");
-			}
-		}else {
-			result = addFlashAttribute(attr, discount, "discount");
-		}
-		return result;
-	}
-	
-	private static boolean addFlashAttribute(RedirectAttributes attr, String data, String about) {
-		attr.addFlashAttribute(about+"Error", "Enter valid "+about+"!");
-		attr.addFlashAttribute(about, data);
-		return false;
-	}
-	
-	
-	@RequestMapping(value = "viewFinishedNormalOrders", method=RequestMethod.GET)
+	@RequestMapping(value = "viewFinishedExpressOrders", method=RequestMethod.GET)
 	public String listFinishedOrders(HttpSession session, Model model) {
 		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
 			if(!LoggedValidator.checksIfUserIsLogged(session)) {
@@ -226,11 +188,10 @@ public class AdminNormalOrderController {
 		
 		model.addAttribute("firstDate", first_date_finished_orders);
 		model.addAttribute("secondDate", second_date_finished_orders);
-		return "adminViews/normalOrders/viewFinishedOrders";
+		return "adminViews/expressOrders/viewFinishedOrders";
 	}
 	
-	
-	@RequestMapping(value= "searchFinishedOrdersBetweenDates", method = RequestMethod.POST)
+	@RequestMapping(value= "searchFinishedExpressOrdersBetweenDates", method = RequestMethod.POST)
 	public String searchFinishedOrdersBetweenDates(HttpSession session, HttpServletRequest request, RedirectAttributes attr) {
 		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
 			if(!LoggedValidator.checksIfUserIsLogged(session)) {
@@ -249,7 +210,7 @@ public class AdminNormalOrderController {
 			first_date_finished_orders_searching = firstDate;
 			second_date_finished_orders_searching = secondDate;
 			
-			orders = od.findAllFinishedUnExpressOrdersBetweenDates(firstDate, secondDate);
+			orders = od.findAllFinishedExpressOrdersBetweenDates(firstDate, secondDate);
 		} catch (ParseException e1) {
 			// TODO 
 			e1.printStackTrace();
@@ -265,10 +226,10 @@ public class AdminNormalOrderController {
 		attr.addFlashAttribute("total",total);
 		attr.addFlashAttribute("orders",orders);
 		attr.addFlashAttribute("showContent", new Object());
-		return "redirect:/viewFinishedNormalOrders";
+		return "redirect:/viewFinishedExpressOrders";
 	}
 	
-	@RequestMapping(value="finishedOrderDetails/{orderId}", method=RequestMethod.GET)
+	@RequestMapping(value="finishedExpressOrderDetails/{orderId}", method=RequestMethod.GET)
 	public String viewFinishedOrderDetails(@PathVariable int orderId, HttpSession session, Model model) {
 		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
 			if(!LoggedValidator.checksIfUserIsLogged(session)) {
@@ -279,7 +240,7 @@ public class AdminNormalOrderController {
 		}
 		Order order = null;
 		try {
-		order = od.findFinishedUnExpressOrderById(orderId);
+		order = od.findFinishedExpressOrderById(orderId);
 		} catch (SQLException e) {
 			e.printStackTrace(); //TODO
 		}
@@ -293,10 +254,10 @@ public class AdminNormalOrderController {
 		result = (double) Math.round((order.getCost()-result) * 100) / 100;
 		model.addAttribute("totalPrice", result);
 		model.addAttribute("order",order);
-		return "adminViews/normalOrders/finishedOrderDetails";
+		return "adminViews/expressOrders/finishedOrderDetails";
 	}
 	
-	@RequestMapping(value="backToFinishedOrdersList", method=RequestMethod.GET)
+	@RequestMapping(value="backToFinishedExpressOrdersList", method=RequestMethod.GET)
 	public String backToFinishedOrdersList(HttpSession session, Model model) throws ParseException {
 		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
 			if(!LoggedValidator.checksIfUserIsLogged(session)) {
@@ -307,7 +268,7 @@ public class AdminNormalOrderController {
 		}
 		List<Order> orders = null;
 		try {
-			orders = od.findAllFinishedUnExpressOrdersBetweenDates(first_date_finished_orders_searching, second_date_finished_orders_searching);
+			orders = od.findAllFinishedExpressOrdersBetweenDates(first_date_finished_orders_searching, second_date_finished_orders_searching);
 		} catch (SQLException e) {
 			// TODO 
 			e.printStackTrace();
@@ -321,12 +282,8 @@ public class AdminNormalOrderController {
 		model.addAttribute("showContent", new Object());
 		model.addAttribute("firstDate", first_date_finished_orders);
 		model.addAttribute("secondDate", second_date_finished_orders);
-		return "adminViews/normalOrders/viewFinishedOrders";
-		
-		
+		return "adminViews/expressOrders/viewFinishedOrders";
 	}
-	
-	
-	
-	
 }
+
+

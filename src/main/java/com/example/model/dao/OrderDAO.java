@@ -216,6 +216,29 @@ public class OrderDAO {
 		return orders;
 	}
 	
+	public List<Order> findAllUncheckedExpress() throws SQLException{
+		Connection con = db.getConn();
+		PreparedStatement ps = con.prepareStatement("SELECT id_order,first_name, last_name, date_creation, date_finished, email, city,"
+				+ "streetAddress, telNum, cost, note, discount, type_of_order FROM orders WHERE"
+				+ " date_finished IS NULL  AND is_accepted = 0 AND type_of_order = 1;", Statement.RETURN_GENERATED_KEYS);
+		ps.executeQuery();
+		ResultSet rs = ps.getResultSet();
+		List<Order> orders = new LinkedList<Order>();
+		while(rs.next()) {
+			orders.add(new Order(
+					rs.getInt("id_order"),
+					rs.getTimestamp("date_creation"),
+					rs.getTimestamp("date_finished"),
+					rs.getDouble("cost"),
+					rs.getString("first_name"),
+					rs.getString("last_name"),
+					dd.getDiscountsForOrder(new Order(rs.getInt("id_order"))),
+					new User()
+					));
+		}
+		return orders;
+	}
+	
 	public Order findUncheckedUnExpressOrderById(int id) throws SQLException {
 		Connection con = db.getConn();
 		PreparedStatement ps = con.prepareStatement("SELECT id_order,first_name, last_name,"
@@ -248,6 +271,38 @@ public class OrderDAO {
 				);
 	}
 	
+	public Order findUncheckedExpressOrderById(int id) throws SQLException {
+		Connection con = db.getConn();
+		PreparedStatement ps = con.prepareStatement("SELECT id_order,first_name, last_name,"
+				+ " date_creation, date_finished, email, city,"
+				+ "streetAddress, telNum, cost, note, discount, "
+				+ "type_of_order, is_accepted FROM orders WHERE id_order= ? "
+				+ "AND date_finished IS NULL  AND is_accepted = 0 "
+				+ "AND type_of_order = 1;", Statement.RETURN_GENERATED_KEYS);
+		ps.setInt(1, id);
+		ps.executeQuery();
+	
+		ResultSet rs = ps.getResultSet();
+		rs.next();
+		return new Order(
+				rs.getInt("id_order"),
+				rs.getTimestamp("date_creation"),
+				rs.getTimestamp("date_finished"),
+				rs.getDouble("cost"),
+				rs.getString("first_name"),
+				rs.getString("last_name"),
+				dd.getDiscountsForOrder(new Order(rs.getInt("id_order"))),
+				rs.getString("email"),
+				rs.getString("city"),
+				rs.getString("streetAddress"),
+				rs.getString("telNum"),
+				rs.getString("note"),
+				rs.getBoolean("type_of_order"),
+				rs.getBoolean("is_accepted"),
+				rs.getDouble("discount")
+				);
+	}
+	
 	public Order findCheckedUnExpressOrderById(int id) throws SQLException {
 		Connection con = db.getConn();
 		PreparedStatement ps = con.prepareStatement("SELECT id_order,first_name, last_name,"
@@ -256,6 +311,38 @@ public class OrderDAO {
 				+ "type_of_order, is_accepted FROM orders WHERE id_order= ? "
 				+ "AND date_finished IS NULL  AND is_accepted = 1 "
 				+ "AND type_of_order = 0;", Statement.RETURN_GENERATED_KEYS);
+		ps.setInt(1, id);
+		ps.executeQuery();
+	
+		ResultSet rs = ps.getResultSet();
+		rs.next();
+		return new Order(
+				rs.getInt("id_order"),
+				rs.getTimestamp("date_creation"),
+				rs.getTimestamp("date_finished"),
+				rs.getDouble("cost"),
+				rs.getString("first_name"),
+				rs.getString("last_name"),
+				dd.getDiscountsForOrder(new Order(rs.getInt("id_order"))),
+				rs.getString("email"),
+				rs.getString("city"),
+				rs.getString("streetAddress"),
+				rs.getString("telNum"),
+				rs.getString("note"),
+				rs.getBoolean("type_of_order"),
+				rs.getBoolean("is_accepted"),
+				rs.getDouble("discount")
+				);
+	}
+	
+	public Order findCheckedExpressOrderById(int id) throws SQLException {
+		Connection con = db.getConn();
+		PreparedStatement ps = con.prepareStatement("SELECT id_order,first_name, last_name,"
+				+ " date_creation, date_finished, email, city,"
+				+ "streetAddress, telNum, cost, note, discount, "
+				+ "type_of_order, is_accepted FROM orders WHERE id_order= ? "
+				+ "AND date_finished IS NULL  AND is_accepted = 1 "
+				+ "AND type_of_order = 1;", Statement.RETURN_GENERATED_KEYS);
 		ps.setInt(1, id);
 		ps.executeQuery();
 	
@@ -323,10 +410,58 @@ public class OrderDAO {
 		return orders;
 	}
 	
+	public List<Order> findAllCheckedExpressOrders() throws SQLException{
+		Connection con = db.getConn();
+		PreparedStatement ps = con.prepareStatement("SELECT id_order,first_name, last_name, date_creation, date_finished, email, city,"
+				+ "streetAddress, telNum, cost, note, discount, type_of_order FROM orders WHERE"
+				+ " date_finished IS NULL  AND is_accepted = 1 AND type_of_order = 1;", Statement.RETURN_GENERATED_KEYS);
+		ps.executeQuery();
+		ResultSet rs = ps.getResultSet();
+		List<Order> orders = new LinkedList<Order>();
+		while(rs.next()) {
+			orders.add(new Order(
+					rs.getInt("id_order"),
+					rs.getTimestamp("date_creation"),
+					rs.getTimestamp("date_finished"),
+					rs.getDouble("cost"),
+					rs.getString("first_name"),
+					rs.getString("last_name"),
+					dd.getDiscountsForOrder(new Order(rs.getInt("id_order"))),
+					new User()
+					));
+		}
+		return orders;
+	}
+	
 	public List<Order> findAllFinishedUnExpressOrdersBetweenDates(String dateFrom, String dateTo) throws SQLException{
 		Connection con = db.getConn();
 		PreparedStatement ps = con.prepareStatement("SELECT id_order,first_name, last_name, date_creation, date_finished, email, city,"
-				+ "streetAddress, telNum, cost, note, discount, type_of_order FROM orders WHERE date_creation BETWEEN ? AND  ? AND date_finished IS NOT NULL AND is_accepted = 1;", Statement.RETURN_GENERATED_KEYS);
+				+ "streetAddress, telNum, cost, note, discount, type_of_order FROM orders WHERE date_creation BETWEEN ? AND  ? AND date_finished IS NOT NULL AND is_accepted = 1 AND type_of_order = 0;", Statement.RETURN_GENERATED_KEYS);
+		ps.setString(1, dateFrom+":00");
+		ps.setString(2, dateTo+":59");
+		ps.executeQuery();
+		ResultSet rs = ps.getResultSet();
+		List<Order> orders = new LinkedList<>();
+		while(rs.next()) {
+			orders.add(new Order(
+					rs.getInt("id_order"),
+					rs.getTimestamp("date_creation"),
+					rs.getTimestamp("date_finished"),
+					rs.getDouble("cost"),
+					rs.getString("first_name"),
+					rs.getString("last_name"),
+					dd.getDiscountsForOrder(new Order(rs.getInt("id_order"))),
+					new User()
+					));
+		}
+		return orders;
+	}
+	
+	
+	public List<Order> findAllFinishedExpressOrdersBetweenDates(String dateFrom, String dateTo) throws SQLException{
+		Connection con = db.getConn();
+		PreparedStatement ps = con.prepareStatement("SELECT id_order,first_name, last_name, date_creation, date_finished, email, city,"
+				+ "streetAddress, telNum, cost, note, discount, type_of_order FROM orders WHERE date_creation BETWEEN ? AND  ? AND date_finished IS NOT NULL AND is_accepted = 1 AND type_of_order = 1;", Statement.RETURN_GENERATED_KEYS);
 		ps.setString(1, dateFrom+":00");
 		ps.setString(2, dateTo+":59");
 		ps.executeQuery();
@@ -379,5 +514,36 @@ public class OrderDAO {
 				);
 	}
 
+	public Order findFinishedExpressOrderById(int id) throws SQLException {
+		Connection con = db.getConn();
+		PreparedStatement ps = con.prepareStatement("SELECT id_order,first_name, last_name,"
+				+ " date_creation, date_finished, email, city,"
+				+ "streetAddress, telNum, cost, note, discount, "
+				+ "type_of_order, is_accepted FROM orders WHERE id_order= ? "
+				+ "AND date_finished IS NOT NULL  AND is_accepted = 1 "
+				+ "AND type_of_order = 1;", Statement.RETURN_GENERATED_KEYS);
+		ps.setInt(1, id);
+		ps.executeQuery();
+	
+		ResultSet rs = ps.getResultSet();
+		rs.next();
+		return new Order(
+				rs.getInt("id_order"),
+				rs.getTimestamp("date_creation"),
+				rs.getTimestamp("date_finished"),
+				rs.getDouble("cost"),
+				rs.getString("first_name"),
+				rs.getString("last_name"),
+				dd.getDiscountsForOrder(new Order(rs.getInt("id_order"))),
+				rs.getString("email"),
+				rs.getString("city"),
+				rs.getString("streetAddress"),
+				rs.getString("telNum"),
+				rs.getString("note"),
+				rs.getBoolean("type_of_order"),
+				rs.getBoolean("is_accepted"),
+				rs.getDouble("discount")
+				);
+	}
 	
 }
