@@ -25,6 +25,7 @@ public class Order {
 	private boolean isExpress;
 	private boolean isAccepted;
 	private double totalDiscount;
+	private double discount;
 
 	private String dateCreatedForView;
 	private String dateFinishedForView;
@@ -67,7 +68,7 @@ public class Order {
 	public Order(int id, Date dateCreated, Date dateFinished, double cost, String firstName,
 			String lastName, Set<Discount> discounts,
 			String email, String city, String streetAddress, String telNumber, String note,
-			boolean isExpress, double totalDiscount) {
+			boolean isExpress,boolean isAccepted, double discount) {
 		this(id, dateCreated, dateFinished, cost, firstName, lastName, discounts,new User());
 		this.setEmail(email);
 		this.setCity(city);
@@ -75,7 +76,9 @@ public class Order {
 		this.setTelNumber(telNumber);
 		this.setNote(note);
 		this.setIsExpress(isExpress);
-		this.setTotalDiscount(totalDiscount);
+		this.setDiscount(discount);
+		this.setTotalDiscount();
+		this.setAccepted(isAccepted);
 		try {
 			this.setDateCreatedForView(DateFormatConverter.convertFromDBToListingOrders(dateCreated));
 			if(dateFinished == null) {
@@ -341,6 +344,15 @@ public class Order {
 			dateFinishedForView = "";
 		}
 		this.dateFinishedForView = dateFinishedForView;
+	}
+
+	public double getDiscount() {
+		return discount;
+	}
+
+
+	public void setDiscount(double discount) {
+		this.discount = discount;
 	}
 
 

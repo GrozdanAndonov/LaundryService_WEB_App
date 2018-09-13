@@ -77,7 +77,7 @@ public class UserDAO {
 				rs.getString("telNum"));
 		return new User(rs.getInt("id_user"), rs.getString("first_name"), rs.getString("last_name"),
 				rs.getString("email"), rs.getString("city"), rs.getInt("zipCode"), rs.getBoolean("isAdmin"),
-				rs.getString("telNum"), rs.getString("streetAddress"), avatarUrl, rs.getDate("date_created"),
+				rs.getString("telNum"), rs.getString("streetAddress"), avatarUrl, rs.getTimestamp("date_created"),
 				rs.getTimestamp("last_login_date"), rs.getString("bulstat"), rs.getString("default_language"),
 				rs.getInt("rating"), od.getOrdersForUser(user), cd.getAllCommentsForUser(user));
 	}

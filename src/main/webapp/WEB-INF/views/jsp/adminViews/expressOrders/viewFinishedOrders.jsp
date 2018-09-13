@@ -5,22 +5,22 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Index</title>
+<title>View Finished orders</title>
 <meta
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
 	name="viewport" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<jsp:include page="../staticContent.jsp"></jsp:include>
+<jsp:include page="../../staticContent.jsp"></jsp:include>
 </head>
 <body class="index-page">
-	<jsp:include page="headerLogged.jsp"></jsp:include>
+	<jsp:include page="../adminHeader.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
 		style="background-image: url('<c:url value="/img/bg2.jpg"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
-						<h1>View orders</h1>
+						<h1>View Finished orders</h1>
 					</div>
 				</div>
 			</div>
@@ -31,11 +31,11 @@
 		<div class="section section-basic">
 			<div class="container">
 				<div class="title text-center">
-					<h2>Search orders</h2>
+					<h2>Search Finished orders</h2>
 				</div>
 				<div class="section">
 					<form method="POST"
-						action="/LaundryService/orderList/searchOrdersBetweenDates">
+						action="/LaundryService/searchFinishedExpressOrdersBetweenDates">
 						<div class="form-row">
 							<div class="form-group col-md-4">
 								<label class="label-control">From date</label> <input
@@ -59,7 +59,7 @@
 				<c:if test="${showContent != null}">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="title text-center">
-						<h2>Orders list</h2>
+						<h2>Finished Orders list</h2>
 					</div>
 				</div>
 				
@@ -87,8 +87,8 @@
 									<td><c:out value="${ order.dateFinishedForView }"></c:out></td>
 									<td class="text-right"><c:out value="${ order.cost }"></c:out>lv</td>
 									<td class="td-actions text-right"><a
-										href="/LaundryService/orderDetails/${ order.id }"><button
-												type="button" rel="tooltip" title="View Profile"
+										href="/LaundryService/finishedExpressOrderDetails/${ order.id }"><button
+												type="button" rel="tooltip" title="Order details"
 												class="btn btn-info btn-simple btn-xs btn-link">
 												<i class="fa fa-user"></i>
 											</button> </a></td>
@@ -104,10 +104,15 @@
 				</c:otherwise>
 				</c:choose>
 				</c:if>
+					<div class="col-md-12 text-center">
+			  		<a href="/LaundryService/viewNormalOrders">
+					<button class="btn btn-primary">Back</button>
+					</a>
+					</div>
 			</div>
 		</div>
 	</div>
-	<jsp:include page="../footer.jsp"></jsp:include>
+	<jsp:include page="../../footer.jsp"></jsp:include>
 </body>
 <script>
 	$('.datetimepicker').datetimepicker({

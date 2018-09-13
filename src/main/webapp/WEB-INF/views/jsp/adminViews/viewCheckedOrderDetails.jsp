@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Index</title>
+<title>Order detail</title>
 <meta
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
 	name="viewport" />
@@ -13,7 +13,7 @@
 <jsp:include page="../staticContent.jsp"></jsp:include>
 </head>
 <body class="index-page">
-	<jsp:include page="headerLogged.jsp"></jsp:include>
+	<jsp:include page="adminHeader.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
 		style="background-image: url('<c:url value="/img/bg2.jpg"/>');">
 		<div class="container">
@@ -61,7 +61,6 @@
 							<input type="text" class="form-control" id="inputZip"  value="${order.telNumber}" readonly>
 						</div>
 					</div>
-				
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label for="inputCity">Date of creation</label> 
@@ -78,13 +77,13 @@
 					  <c:if test="${order.cost!=0}">
 					<div class="form-group col-md-6">
 							<label for="inputCity">Total cost</label> 
-							<input type="text" class="form-control" id="inputCity" value="${order.cost}lv"  disabled>
+							<input type="text" class="form-control" id="inputCity" value="${order.cost}lv"  readonly>
 						</div>
 						</c:if>
 						  <c:if test="${order.totalDiscount!=0}">
 						<div class="form-group col-md-6">
 							<label for="inputZip">Total discount</label> 
-							<input type="text" class="form-control" id="inputZip"  value="${order.totalDiscount}lv" disabled>
+							<input type="text" class="form-control" id="inputZip"  value="${order.totalDiscount}lv" readonly>
 						</div>
 						</c:if>
 					</div>
@@ -93,7 +92,7 @@
 					<div class="form-row">
 						<div class="form-group col-md-12">
 				    <label>Enter note for order</label>
-				    <textarea type="text" class="form-control" id="exampleFormControlTextarea1" rows="6"  disabled>${order.note}</textarea>
+				    <textarea type="text" class="form-control" id="exampleFormControlTextarea1" rows="6"  readonly>${order.note}</textarea>
 				  </div>
 				  </div>
 				  </c:if>
@@ -112,7 +111,7 @@
 			  		</c:if>
 				</form>
 					<div class="col-md-12">
-			  		<a href="/LaundryService/orderList/backToOpenListOrderPage">
+			  		<a href="/LaundryService/backToViewCheckedOrdersForUserDetails">
 					<button class="btn btn-primary">Back</button>
 					</a>
 					</div>

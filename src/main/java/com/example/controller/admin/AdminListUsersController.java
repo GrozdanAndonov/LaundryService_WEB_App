@@ -56,9 +56,9 @@ public class AdminListUsersController {
 			TreeSet<User> usersOrdered = new TreeSet<>(new Comparator<User>() {
 				@Override
 				public int compare(User o1, User o2) {
-					int result = (int) (o1.getDaysFromLastLogin()-o2.getDaysFromLastLogin());
+					int result = (int) (o2.getDaysFromLastLogin()-o1.getDaysFromLastLogin());
 					 if(result ==0) {
-						  result = o1.getOrders().size()-o2.getOrders().size();
+						  result = o2.getOrders().size()-o1.getOrders().size();
 						 if(result == 0) {
 							 result = -1;
 						 }
@@ -100,4 +100,25 @@ public class AdminListUsersController {
 		
 	}
 	
+	
+	@RequestMapping(value = "userDetails/{userId}", method = RequestMethod.GET)
+	public String viewUserDetails(HttpSession session, @PathVariable int userId, Model model) {
+		if(!LoggedValidator.checksIfAdminIsLogged(session)) {
+			if(!LoggedValidator.checksIfUserIsLogged(session)) {
+				return "notLoggedIn/indexNotLogged";
+			}else {
+				return "userViews/indexLogged";
+			}
+		}
+		User user = null;
+		try {
+			user = ud.getUserById(userId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		session.setAttribute("userDetails", user);
+		model.addAttribute("user", user);
+		return "adminViews/viewUserDetails";
+	}
 }

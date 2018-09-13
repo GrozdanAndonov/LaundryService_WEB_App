@@ -5,22 +5,22 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Index</title>
+<title>Unchecked orders list</title>
 <meta
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
 	name="viewport" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<jsp:include page="../staticContent.jsp"></jsp:include>
+<jsp:include page="../../staticContent.jsp"></jsp:include>
 </head>
 <body class="index-page">
-	<jsp:include page="headerLogged.jsp"></jsp:include>
+	<jsp:include page="../adminHeader.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
 		style="background-image: url('<c:url value="/img/bg2.jpg"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
-						<h1>View orders</h1>
+						<h1>Unchecked orders list</h1>
 					</div>
 				</div>
 			</div>
@@ -31,38 +31,8 @@
 		<div class="section section-basic">
 			<div class="container">
 				<div class="title text-center">
-					<h2>Search orders</h2>
-				</div>
-				<div class="section">
-					<form method="POST"
-						action="/LaundryService/orderList/searchOrdersBetweenDates">
-						<div class="form-row">
-							<div class="form-group col-md-4">
-								<label class="label-control">From date</label> <input
-									id="datetimepicker1" type="text"
-									class="form-control datetimepicker" name="firstDate"
-									value="${ firstDate }" />
-							</div>
-							<div class="form-group col-md-4">
-								<label class="label-control">To date</label> <input
-									id="datetimepicker2" type="text"
-									class="form-control datetimepicker" name="secondDate"
-									value="${ secondDate }" />
-							</div>
-							<div class="form-group col-md-4 text-center">
-								<input class="btn btn-primary btn-round" type="submit"
-									value="Search">
-							</div>
-						</div>
-					</form>
-				</div>
-				<c:if test="${showContent != null}">
-				<div class="col-md-8 ml-auto mr-auto">
-					<div class="title text-center">
-						<h2>Orders list</h2>
-					</div>
-				</div>
-				
+					<h2>Unchecked orders</h2>
+
 				<c:choose>
 				<c:when test="${orders != null &&  !orders.isEmpty()}">
 					<table class="table">
@@ -87,7 +57,7 @@
 									<td><c:out value="${ order.dateFinishedForView }"></c:out></td>
 									<td class="text-right"><c:out value="${ order.cost }"></c:out>lv</td>
 									<td class="td-actions text-right"><a
-										href="/LaundryService/orderDetails/${ order.id }"><button
+										href="/LaundryService/uncheckedOrderDetails/${ order.id }"><button
 												type="button" rel="tooltip" title="View Profile"
 												class="btn btn-info btn-simple btn-xs btn-link">
 												<i class="fa fa-user"></i>
@@ -99,29 +69,19 @@
 				</c:when>
 				<c:otherwise>
 					<div class="title text-center">
-						<h3>You have no finished orders.</h3>
+						<h3>No unchecked orders found.</h3>
 					</div>
 				</c:otherwise>
 				</c:choose>
-				</c:if>
+					<div class="col-md-12">
+			  		<a href="/LaundryService/viewNormalOrders">
+					<button class="btn btn-primary">Back</button>
+					</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-	<jsp:include page="../footer.jsp"></jsp:include>
+	<jsp:include page="../../footer.jsp"></jsp:include>
 </body>
-<script>
-	$('.datetimepicker').datetimepicker({
-		icons : {
-			time : "fa fa-clock-o",
-			date : "fa fa-calendar",
-			up : "fa fa-chevron-up",
-			down : "fa fa-chevron-down",
-			previous : 'fa fa-chevron-left',
-			next : 'fa fa-chevron-right',
-			today : 'fa fa-screenshot',
-			clear : 'fa fa-trash',
-			close : 'fa fa-remove'
-		}
-	});
-</script>
 </html>

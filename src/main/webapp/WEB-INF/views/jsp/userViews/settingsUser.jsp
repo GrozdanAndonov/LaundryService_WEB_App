@@ -119,7 +119,7 @@
 						</div>
 						<div class="form-group col-md-3">
 							<label for="inputState">Date of creation</label> <input
-								type="text" class="form-control" id="date" disabled
+								type="text" class="form-control" id="date" readonly
 								value="${dateOfCreation}">
 						</div>
 						<div class="form-group col-md-2 ml-auto">

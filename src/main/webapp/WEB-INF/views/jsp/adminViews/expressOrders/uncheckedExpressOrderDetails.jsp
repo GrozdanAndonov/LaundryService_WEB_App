@@ -5,22 +5,22 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Index</title>
+<title>Express Order details</title>
 <meta
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
 	name="viewport" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<jsp:include page="../staticContent.jsp"></jsp:include>
+<jsp:include page="../../staticContent.jsp"></jsp:include>
 </head>
 <body class="index-page">
-	<jsp:include page="headerLogged.jsp"></jsp:include>
+	<jsp:include page="../adminHeader.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
 		style="background-image: url('<c:url value="/img/bg2.jpg"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
-						<h1>Order details</h1>
+						<h1>Express Order details</h1>
 					</div>
 				</div>
 			</div>
@@ -31,7 +31,7 @@
 		<div class="section section-basic">
 			<div class="container">
 				<div class="title text-centre">
-					<h2>Order information</h2>
+					<h2>Express Order information</h2>
 				</div>
 				<form>
 					<div class="form-row">
@@ -61,7 +61,6 @@
 							<input type="text" class="form-control" id="inputZip"  value="${order.telNumber}" readonly>
 						</div>
 					</div>
-				
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label for="inputCity">Date of creation</label> 
@@ -78,13 +77,13 @@
 					  <c:if test="${order.cost!=0}">
 					<div class="form-group col-md-6">
 							<label for="inputCity">Total cost</label> 
-							<input type="text" class="form-control" id="inputCity" value="${order.cost}lv"  disabled>
+							<input type="text" class="form-control" id="inputCity" value="${order.cost}lv"  readonly>
 						</div>
 						</c:if>
 						  <c:if test="${order.totalDiscount!=0}">
 						<div class="form-group col-md-6">
 							<label for="inputZip">Total discount</label> 
-							<input type="text" class="form-control" id="inputZip"  value="${order.totalDiscount}lv" disabled>
+							<input type="text" class="form-control" id="inputZip"  value="${order.totalDiscount}lv" readonly>
 						</div>
 						</c:if>
 					</div>
@@ -93,7 +92,7 @@
 					<div class="form-row">
 						<div class="form-group col-md-12">
 				    <label>Enter note for order</label>
-				    <textarea type="text" class="form-control" id="exampleFormControlTextarea1" rows="6"  disabled>${order.note}</textarea>
+				    <textarea type="text" class="form-control" id="exampleFormControlTextarea1" rows="6"  readonly>${order.note}</textarea>
 				  </div>
 				  </div>
 				  </c:if>
@@ -111,15 +110,22 @@
 			  		</div>
 			  		</c:if>
 				</form>
-					<div class="col-md-12">
-			  		<a href="/LaundryService/orderList/backToOpenListOrderPage">
+					<div class="form-row">
+					<div class="col-md-6">
+			  		<a href="/LaundryService/viewUncheckedExpressOrders">
 					<button class="btn btn-primary">Back</button>
 					</a>
+					</div>
+					<div class="col-md-6 text-right">
+			  		<a href="/LaundryService/checkExpressOrder/${order.id}">
+					<button class="btn btn-primary">Check order</button>
+					</a>
+					</div>
 					</div>
 			</div>
 		</div>
 	</div>
-	<jsp:include page="../footer.jsp"></jsp:include>
+	<jsp:include page="../../footer.jsp"></jsp:include>
 </body>
 <script>
 let checkbox = document.getElementById('checkbox');
