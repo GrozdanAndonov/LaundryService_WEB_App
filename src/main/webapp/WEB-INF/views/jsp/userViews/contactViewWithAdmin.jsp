@@ -16,7 +16,7 @@
 <body class="index-page">
 	<jsp:include page="headerLogged.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
-		style="background-image: url('<c:url value="/img/bg2.jpg"/>');">
+		style="background-image: url('<c:url value="/img/2.png"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">

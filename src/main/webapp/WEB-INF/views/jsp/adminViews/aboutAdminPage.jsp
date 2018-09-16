@@ -12,7 +12,8 @@
 </head>
 <body class="profile-page">
 <jsp:include page="adminHeader.jsp"></jsp:include>
- <div class="page-header header-filter" data-parallax="true" style="background-image: url('<c:url value="/img/bg2.jpg"/>');"></div>
+ <div class="page-header header-filter" data-parallax="true"
+		style="background-image: url('<c:url value="/img/2.png"/>');"></div>
     <div class="main main-raised">
         <div class="profile-content">
             <div class="container">
