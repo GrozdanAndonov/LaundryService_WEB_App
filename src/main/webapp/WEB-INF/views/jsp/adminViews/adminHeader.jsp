@@ -40,6 +40,13 @@
                                             <a href="/LaundryService/logout" class="dropdown-item">Sign out</a>
                                         </div>
                                     </li>
+                                       <li class="nav-item dropdown">
+				    <a id="header-languages" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img id="flagImage" src="<c:url value="/img/flags/GB.png" />"/><s:message code="notLogged.languages"></s:message></a>
+				    <div class="dropdown-menu">
+				      <a class="dropdown-item" href="?language=en" onclick="changeImage('<c:url value="/img/flags/GB.png" />');"><img src="<c:url value="/img/flags/GB.png" />"/> English(UK)</a>
+				      <a class="dropdown-item" href="?language=bg" onclick="changeImage('<c:url value="/img/flags/BG.png" />');"><img src="<c:url value="/img/flags/BG.png" />"/> Български(BG)</a>
+				    </div>
+				  </li>
                 </ul>
             </div>
         </div>
