@@ -5,15 +5,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Order detail</title>
+<title>Index</title>
 <meta
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
 	name="viewport" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<jsp:include page="../../staticContent.jsp"></jsp:include>
+<jsp:include page="../staticContent.jsp"></jsp:include>
 </head>
 <body class="index-page">
-	<jsp:include page="../adminHeader.jsp"></jsp:include>
+	<jsp:include page="headerLogged.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
 		style="background-image: url('<c:url value="/img/bg2.jpg"/>');">
 		<div class="container">
@@ -33,6 +33,7 @@
 				<div class="title text-centre">
 					<h2>Order information</h2>
 				</div>
+				<form>
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label for="inputEmail4">First Name</label> 
@@ -72,6 +73,34 @@
 						</div>
 						</c:if>
 					</div>
+					<div class="form-row">
+					  <c:if test="${order.cost!=0}">
+					<div class="form-group col-md-6">
+							<label for="inputCity">Price(lv)</label> 
+							<input type="text" class="form-control" id="inputCity" value="${order.cost}"  readonly>
+						</div>
+						</c:if>
+						  <c:if test="${order.discount!=0}">
+						<div class="form-group col-md-6">
+							<label for="inputZip">Total discount(%)</label> 
+							<input type="text" class="form-control" id="inputZip"  value="${order.discount}" readonly>
+						</div>
+						</c:if>
+					</div>
+					<div class="form-row">
+					 <c:if test="${totalPrice!=0}">
+						<div class="form-group col-md-6">
+							<label for="inputCity">Calculated price(lv)</label> 
+							<input type="text" class="form-control" id="inputCity" value="${totalPrice}"  readonly>
+						</div>
+						</c:if>
+						<c:if test="${discount!=0}">
+						<div class="form-group col-md-6">
+							<label for="inputCity">Discount(lv)</label> 
+							<input type="text" class="form-control" id="inputCity" value="${discount}"  readonly>
+						</div>
+						</c:if>
+					</div>
 					  <c:if test="${!order.note.isEmpty()}">
 					<div class="form-row">
 						<div class="form-group col-md-12">
@@ -80,57 +109,29 @@
 				  </div>
 				  </div>
 				  </c:if>
-			
-			  <form method="POST" action="/LaundryService/finishOrder/${ order.id }">
-				<div class="form-row">
-					<div class="form-group col-md-4">
-								<label for="inputZip">Price(lv)</label> <input type="number"  step="0.01"
-								class="form-control" id="inputZip" name="cost" value="${cost}">
-								<p class="text-danger">
-								<strong>${costError}</strong>
-							</p>
-						</div>
-						<div class="form-group col-md-4">
-								<label for="inputZip">Discount(%)</label> <input type="number"  step="0.01"
-								class="form-control" id="inputZip" name="discount" value="${discount}">
-								<p class="text-danger">
-								<strong>${discountError}</strong>
-							</p>
-						</div>
-							<div class="form-group col-md-4 text-center">
-							<button type="submit" class="btn btn-primary">Finish order</button>
-							</div>
-				</div>
-				<c:if test="${msgError != null}">
-				<div class="alert alert-danger">
-				    <div class="container-fluid">
-					  <div class="alert-icon">
-					    <i class="material-icons">error_outline</i>
-					  </div>
-					  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true"><i class="material-icons">clear</i></span>
-					  </button>
-				      <b>Error:</b> <c:out value="${msgError}"></c:out>
-				    </div>
-				</div>
-				</c:if>
-					<p class="text-danger">
-						<strong>${msgError}</strong>
-					</p>
+				  <c:if test="${order.isExpress == true }">
+					<div class="form-row">
+					<div class="form-check">
+				      <label class="form-check-label">
+				          <input id="checkbox" class="form-check-input" type="checkbox" value="${order.isExpress}" disabled>
+				          Express order
+				          <span class="form-check-sign">
+				              <span class="check"></span>
+				          </span>
+				      </label>
+			  		</div>
+			  		</div>
+			  		</c:if>
 				</form>
-				
-				<div class="form-row">
-					<div class="col-md-6">
-			  		<a href="/LaundryService/viewCheckedNormalOrders">
+					<div class="col-md-12">
+			  		<a href="/LaundryService/orderList/backToFinishedListOrderPage">
 					<button class="btn btn-primary">Back</button>
 					</a>
 					</div>
-					</div>
-					
 			</div>
 		</div>
 	</div>
-	<jsp:include page="../../footer.jsp"></jsp:include>
+	<jsp:include page="../footer.jsp"></jsp:include>
 </body>
 <script>
 let checkbox = document.getElementById('checkbox');

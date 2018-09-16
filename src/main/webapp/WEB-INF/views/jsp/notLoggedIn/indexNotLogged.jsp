@@ -15,7 +15,7 @@
 <body class="index-page">
 	<jsp:include page="headerNotLogged.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
-		style="background-image: url('<c:url value="/img/bg2.jpg"/>');">
+		style="background-image: url('<c:url value="/img/2.png"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
@@ -43,15 +43,15 @@
 						</ol>
 						<div class="carousel-inner">
 							<div class="carousel-item active">
-								<img class="d-block w-100" src="<c:url value="/img/bg2.jpg"/>"
+								<img class="d-block w-100" src="<c:url value="/img/5.jpg"/>"
 									alt="First slide">
 							</div>
 							<div class="carousel-item">
-								<img class="d-block w-100" src="<c:url value="/img/bg3.jpg"/>"
+								<img class="d-block w-100" src="<c:url value="/img/6.jpg"/>"
 									alt="Second slide">
 							</div>
 							<div class="carousel-item">
-								<img class="d-block w-100" src="<c:url value="/img/bg.jpg"/>"
+								<img class="d-block w-100" src="<c:url value="/img/7.jpg"/>"
 									alt="Third slide">
 							</div>
 						</div>

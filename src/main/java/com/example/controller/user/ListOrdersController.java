@@ -377,6 +377,33 @@ public class ListOrdersController {
 		return "redirect:showFinishedOrderListPage";
 	}
 	
+	@RequestMapping(value="finishedUserOrderDetails/{orderId}", method=RequestMethod.GET)
+	public String viewFinishedOrderDetails(@PathVariable int orderId, HttpSession session, Model model) {
+		if(!LoggedValidator.checksIfUserIsLogged(session)){
+			if(LoggedValidator.checksIfAdminIsLogged(session)) {
+				return "adminViews/adminIndexPage";
+			}
+			return "notLoggedIn/indexNotLogged";
+		}
+		Order order = null;
+		try {
+		order = od.findFinishedUnExpressOrderById(orderId);
+		} catch (SQLException e) {
+			e.printStackTrace(); //TODO
+		}
+		double result = 0;
+		if(order!=null) {
+		double discounts = order.getDiscount()+order.getTotalDiscount();
+			result = (discounts/100)*order.getCost();
+			System.out.println(result);
+		}
+		model.addAttribute("discount", ((double) Math.round(result * 100) / 100));
+		result = (double) Math.round((order.getCost()-result) * 100) / 100;
+		model.addAttribute("totalPrice", result);
+		model.addAttribute("order",order);
+		return "userViews/userViewFinishedOrderDetails";
+	}
+	
 	private void setDataForFinishedOrders(User user ,RedirectAttributes attr) throws SQLException, ParseException {
 		Set<Order> orders =	od.searchFinishedOrdersForUserBetweenDates(user, staticDateFromFinishedOrders, staticDateToFinishedOrders);
 		double total = 0;

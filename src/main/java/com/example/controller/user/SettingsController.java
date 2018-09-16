@@ -143,7 +143,7 @@ public class SettingsController {
 			attr.addFlashAttribute("streetError", "Street address must be valid! Example: Goce Delchev 4");
 			result = false;
 		}
-		if(!bulstat.matches("^[0-9]{9}$")) {
+		if(!bulstat.matches("^[0-9]{8}$")) {
 			attr.addFlashAttribute("bulstatError", "Enter valid bulstat! Example: 12345678");
 			result = false;
 		}

@@ -139,7 +139,7 @@ public class CreateOrderController {
 		if(!user.getStreetAddress().matches("^[\\w\\s]{2,}$")) {
 			result = false;
 		}
-		if(!user.getBulstatNumber().matches("^[0-9]{9}$")) {
+		if(!user.getBulstatNumber().matches("^[0-9]{8}$")) {
 			result = false;
 		}
 		return result;
