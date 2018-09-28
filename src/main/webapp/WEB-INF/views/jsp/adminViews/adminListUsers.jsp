@@ -26,12 +26,13 @@
 <body class="index-page">
 	<jsp:include page="adminHeader.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
-		style="background-image: url('<c:url value="/img/2.png"/>');">
+		style="background-image: url('<c:url value="/img/8.jpg"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
-						<h1>Users</h1>
+						<h1>Admin checking users</h1>
+						<!--  <h3>A Badass Bootstrap 4 UI Kit based on Material Design.</h3>-->
 					</div>
 				</div>
 			</div>

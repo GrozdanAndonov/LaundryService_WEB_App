@@ -15,13 +15,13 @@
 <body class="index-page">
 	<jsp:include page="headerLogged.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
-		style="background-image: url('<c:url value="/img/2.png"/>');">
+		style="background-image: url('<c:url value="/img/8.jpg"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
-						<h1>Index page</h1>
-						<h3>A Badass Bootstrap 4 UI Kit based on Material Design.</h3>
+						<h1>Welcome</h1>
+						<!--  <h3>A Badass Bootstrap 4 UI Kit based on Material Design.</h3>--> 
 					</div>
 				</div>
 			</div>
@@ -32,7 +32,7 @@
 		<div class="section section-basic">
 			<div class="container">
 				<div class="title">
-					<h2>Basic Elements</h2>
+					<h2>Our services</h2>
 					<div id="carouselExampleIndicators" class="carousel slide"
 						data-ride="carousel">
 						<ol class="carousel-indicators">

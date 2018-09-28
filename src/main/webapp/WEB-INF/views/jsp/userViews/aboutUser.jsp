@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Me</title>
+<title>My profile</title>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <jsp:include page="../staticContent.jsp"></jsp:include>
@@ -13,7 +13,7 @@
 <body class="profile-page">
 <jsp:include page="headerLogged.jsp"></jsp:include>
 <div class="page-header header-filter" data-parallax="true"
-		style="background-image: url('<c:url value="/img/2.png"/>');"></div>
+		style="background-image: url('<c:url value="/img/8.jpg"/>');"></div>
     <div class="main main-raised">
         <div class="profile-content">
             <div class="container">

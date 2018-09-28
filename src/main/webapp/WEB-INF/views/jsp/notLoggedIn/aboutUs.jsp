@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -13,13 +14,14 @@
 <body class="index-page">
 <jsp:include page="headerNotLogged.jsp"></jsp:include>
  <div class="page-header header-filter" data-parallax="true"
-		style="background-image: url('<c:url value="/img/2.png"/>');">
+		style="background-image: url('<c:url value="/img/8.jpg"/>');">
         <div class="container">			
             <div class="row">
                 <div class="col-md-8 ml-auto mr-auto">
                     <div class="brand">
-                        <h1>About us page</h1>
-                        <h3>A Badass Bootstrap 4 UI Kit based on Material Design.</h3>
+                    <br>
+                    <br>
+                        <h1><s:message code="aboutUs.header"></s:message></h1>
                     </div>
                 </div>
             </div>
@@ -30,7 +32,13 @@
         <div class="section section-basic">
             <div class="container">
                 <div class="title">
-                    <h2>About us</h2>
+                    
+                   <center><h2><b><i><s:message code="aboutUs.name"></s:message></i></b></h2></center>
+                    <br> 
+                    <center><h2><b><i><s:message code="aboutUs.thanks"></s:message></i></b></h2></center>
+                    <br>
+                    <center><h3><s:message code="aboutUs.description"></s:message></h3></center>
+                    
                 </div>
 
 

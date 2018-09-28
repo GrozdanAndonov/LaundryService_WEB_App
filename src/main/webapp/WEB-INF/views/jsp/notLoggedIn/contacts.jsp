@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -26,13 +27,15 @@
 <body class="index-page">
 	<jsp:include page="headerNotLogged.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
-		style="background-image: url('<c:url value="/img/2.png"/>');">
+		style="background-image: url('<c:url value="/img/8.jpg"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
-						<h1>Index page</h1>
-						<h3>A Badass Bootstrap 4 UI Kit based on Material Design.</h3>
+					<br>
+					<br>
+						<h1><s:message code="contacts.contacts"></s:message></h1>
+						<!--  <h3>A Badass Bootstrap 4 UI Kit based on Material Design.</h3> -->
 					</div>
 				</div>
 			</div>
@@ -46,11 +49,8 @@
 				<div class="section section-contacts">
 					<div class="row">
 						<div class="col-md-8 ml-auto mr-auto">
-							<h2 class="text-center title">Work with us</h2>
-							<h4 class="text-center description">Divide details about
-								your product or agency work into parts. Write a few lines about
-								each one and contact us about any further collaboration. We will
-								responde get back to you in a couple of hours.</h4>
+							<h2 class="text-center title"><s:message code="contacts.workwithus"></s:message></h2>
+							<h4 class="text-center description"><s:message code="contacts.clientinfo"></s:message></h4>
 								
 								
 							<form class="contact-form" method="POST"
@@ -58,7 +58,7 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="bmd-label-floating">Your Name</label> <input
+											<label class="bmd-label-floating"><s:message code="contacts.yourname"></s:message></label> <input
 										type="text" class="form-control" name="name"
 										value="${enteredName}" required>
 									<p class="text-danger">
@@ -68,7 +68,7 @@
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="bmd-label-floating">Your Email</label>  <input
+											<label class="bmd-label-floating"><s:message code="contacts.yourmail"></s:message></label>  <input
 										type="email" class="form-control" name="email"
 										value="${enteredEmail}" required>
 									<p class="text-danger">
@@ -78,8 +78,7 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="exampleMessage" class="bmd-label-floating">Your
-										Message</label>
+									<label for="exampleMessage" class="bmd-label-floating"><s:message code="contacts.yourmessage"></s:message></label>
 									<textarea type="text" class="form-control" rows="4"
 								id="exampleMessage" name="text" required>${enteredText}</textarea>
 							<p class="text-danger">
@@ -94,8 +93,7 @@
 										<p class="text-danger">
 											<strong>${recaptchaError}</strong>
 										</p> 
-										<button class="btn btn-primary btn-raised">Send
-											Message</button>
+										<button class="btn btn-primary btn-raised"><s:message code="contacts.send"></s:message></button>
 									</div>
 								</div>
 							</form>

@@ -15,12 +15,12 @@
 <body class="index-page">
 	<jsp:include page="adminHeader.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
-		style="background-image: url('<c:url value="/img/2.png"/>');">
+		style="background-image: url('<c:url value="/img/8.jpg"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
-						<h1>Settings Admin</h1>
+						<h1>Admin Settings</h1>
 					</div>
 				</div>
 			</div>
@@ -31,7 +31,7 @@
 		<div class="section section-basic">
 			<div class="container">
 				<div class="title text-center">
-					<h2>Basic Elements</h2>
+					<h2>My Settings</h2>
 					<form action="uploadPictureForAdmin" method="post"
 						enctype="multipart/form-data">
 						<div class="login-form">

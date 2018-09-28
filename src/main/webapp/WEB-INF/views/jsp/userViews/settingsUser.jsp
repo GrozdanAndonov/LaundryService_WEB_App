@@ -15,13 +15,13 @@
 <body class="index-page">
 	<jsp:include page="headerLogged.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
-		style="background-image: url('<c:url value="/img/2.png"/>');">
+		style="background-image: url('<c:url value="/img/8.jpg"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
 						<h1>Settings</h1>
-						<h3>A Badass Bootstrap 4 UI Kit based on Material Design.</h3>
+						<!-- <h3>A Badass Bootstrap 4 UI Kit based on Material Design.</h3> -->
 					</div>
 				</div>
 			</div>
@@ -32,7 +32,7 @@
 		<div class="section section-basic">
 			<div class="container">
 				<div class="title text-center">
-					<h2>Basic Elements</h2>
+					<h2>My settings</h2>
 					<form action="uploadPicture" method="post"
 						enctype="multipart/form-data">
 						<div class="login-form">

@@ -4,6 +4,7 @@
 <nav class="navbar navbar-color-on-scroll navbar-transparent    fixed-top  navbar-expand-lg " color-on-scroll="100" id="sectionsNav">
         <div class="container">
             <div class="navbar-translate">
+                <!--  <a class="navbar-brand" href="/LaundryService/">Index</a>-->
                 <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                     <span class="navbar-toggler-icon"></span>
@@ -29,7 +30,7 @@
                     </li>
                       <li class = "nav-item">
                         <a href="/LaundryService/contacts/contactWithAdmin" class="nav-link">
-                           CONTACT WITH ADMIN
+                           CONTACT ADMIN
                         </a>
                     </li>
                        <li class="dropdown nav-item">
@@ -40,7 +41,7 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <h6 class="dropdown-header">Welcome, ${ sessionScope.User.lastName }</h6>
-                                            <a href="/LaundryService/aboutUser" class="dropdown-item">Me</a>
+                                            <a href="/LaundryService/aboutUser" class="dropdown-item">My profile</a>
                                             <a href="/LaundryService/settings" class="dropdown-item">Settings</a>
                                             <a href="/LaundryService/logout" class="dropdown-item">Sign out</a>
                                         </div>

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Contact with admin</title>
+<title>Contact admin</title>
 <meta
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
 	name="viewport" />
@@ -16,12 +16,12 @@
 <body class="index-page">
 	<jsp:include page="headerLogged.jsp"></jsp:include>
 	<div class="page-header header-filter" data-parallax="true"
-		style="background-image: url('<c:url value="/img/2.png"/>');">
+		style="background-image: url('<c:url value="/img/8.jpg"/>');">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand">
-						<h1>Contact With Admin</h1>
+						<h1>Contact Admin</h1>
 					</div>
 				</div>
 			</div>
@@ -32,16 +32,14 @@
 		<div class="section section-basic">
 			<div class="container">
 				<div class="title text-center">
-					<h2>Contact form:</h2>
+					<h2>Contact here:</h2>
 				</div>
 				<div class="section section-contacts">
 					<div class="row">
 						<div class="col-md-8 ml-auto mr-auto">
-							<h2 class="text-center title">Work with us</h2>
-							<h4 class="text-center description">Divide details about
-								your product or agency work into parts. Write a few lines about
-								each one and contact us about any further collaboration. We will
-								responde get back to you in a couple of hours.</h4>
+							<h2 class="text-center title">Working with us</h2>
+							<h4 class="text-center description">Please do not hesitate to contact us, it would be pleasure for us to understand and help you better. We are looking forward for getting your feedback as soon as possible. </h4>
+							
 
 
 							<form class="contact-form" method="POST"

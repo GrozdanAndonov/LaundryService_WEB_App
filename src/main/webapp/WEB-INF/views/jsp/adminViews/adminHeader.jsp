@@ -18,8 +18,8 @@
                         </a>
                     </li>
                     <li class = "nav-item">
-                        <a href="/LaundryService/viewNormalOrders" class="nav-link">
-                            ORDERS
+                        <a href="/LaundryService/viewOrders" class="nav-link">
+                            HOME PAGE
                         </a>
                     </li>
                     <li class = "nav-item">
@@ -35,7 +35,7 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <h6 class="dropdown-header">Welcome, Admin</h6>
-                                            <a href="/LaundryService/aboutAdminPage" class="dropdown-item">Me</a>
+                                            <a href="/LaundryService/aboutAdminPage" class="dropdown-item">My profile</a>
                                             <a href="/LaundryService/settingsAdmin" class="dropdown-item">Settings</a>
                                             <a href="/LaundryService/logout" class="dropdown-item">Sign out</a>
                                         </div>
